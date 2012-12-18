@@ -16,7 +16,9 @@ function PlayState() {
     this.blocks = new SpriteList();
     block = new Block(20, 20, 40, 20);
     this.addBlock(block);
+    this.addBlock(new Block(40, 80, 80, 10));
     this.test = new Sprite("assets/img/debug.png", 100, context.height / 2 - 100);
+    this.test.stampRect(14, 0, 4, 16, "#0000ff");
     preventKeys("down", "right", "left", "right", "space");
   }
 
