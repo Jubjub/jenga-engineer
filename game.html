@@ -2,9 +2,20 @@
 <html>
     <head>
         <title>jenga-engineer</title>
+        <style media="screen" type="text/css">
+            #canvas {
+                border: 1px solid #aaaaaa;
+                width: 640px;
+                height: 480px;
+                margin: 60px auto;
+                display: block;
+            }
+        </style>
     </head>
     <body onload='init();'>
-        <canvas id='canvas' width='640' height='480'>Your browser needs to support canvas to play this game!</canvas>
+        <canvas id='canvas' width='640' height='480'>
+        Your browser needs to support canvas to play this game!
+        </canvas>
     </body>
         <script type='text/javascript' src='js/pentagine/pentagine.js'></script>
         <script type='text/javascript' src='js/jenga.js'></script>

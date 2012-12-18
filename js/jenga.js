@@ -1,4 +1,4 @@
-
+/* main game state */
 function PlayState() {
   this.setup = function() {
     this.test = new Sprite("assets/img/debug.png", 100, context.height / 2 - 100);
