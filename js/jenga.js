@@ -1,26 +1,24 @@
+
 function PlayState() {
   this.setup = function() {
-    this.ball = new Sprite("assets/img/debug.png", 100, 50);
+    this.test = new Sprite("assets/img/debug.png", 100, context.height / 2 - 100);
     preventKeys("down", "right", "left", "right", "space");
   }
 
-  this.update() = function() {
-    if (isDown("up"))
-      this.ball.y--;
-    else if (isDown("down"))
-      this.ball.y++;
-    else if (isDown("left"))
-      this.ball.x--;
-    else if (isDown("right"))
-      this.ball.x++;
+  this.update = function() {
+    if (isDown("up") || isDown("w"))
+      this.test.y -= 15;
+
+    if (isDown("down") || isDown("s"))
+      this.test.y += 10;
   }
 
-  this.draw() = function() {
+  this.draw = function() {
     clearCanvas();
-
-    this.ball.draw();
+    this.test.draw();
   }
 }
 
 var playState = new PlayState();
 switchState(playState);
+
