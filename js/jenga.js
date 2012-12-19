@@ -39,6 +39,8 @@ function PlayState() {
     this.proc = new Sprite(null, 300, 300);
     this.proc.makeGraphic(160, 20, "#ccff11");
     this.proc.stampText(0, 0, "hello!", 16, "Calibri", "#333333");
+    this.label = new Sprite(null, 50, 0);
+    this.label.makeLabel("JengaEngineer", 70, "Verdana", "black");
     preventKeys("down", "right", "left", "right", "space");
   }
 
@@ -55,11 +57,11 @@ function PlayState() {
 
   this.draw = function() {
     clearCanvas();
+    this.label.draw();
     this.test.draw();
     this.blocks.draw();
     this.proc.draw();
   }
-
 }
 
 var playState = new PlayState();
