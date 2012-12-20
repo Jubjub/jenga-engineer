@@ -1,3 +1,4 @@
+
 /* basic construction piece */
 Block = (function () {
   function constructor(x, y, width, height) {
@@ -19,6 +20,9 @@ function MenuState() {
     this.label.makeLabel("Jenga Engineer", 70, "Verdana", "black");
     this.global.push(this.label);
     preventKeys("down", "right", "left", "right", "space");
+
+    socket = io.connect("http://localhost");
+    socket.emit("ping", { data: "well excuuuuse me princess" });
   }
 
   this.update = function() {
@@ -60,6 +64,10 @@ function PlayState() {
       this.test.y -= 15;
     if (isDown("down") || isDown("s"))
       this.test.y += 10;
+    if (isDown("right") || isDown("d"))
+      this.test.x += 10;
+    if (isDown("left") || isDown("a"))
+      this.test.x -= 10;
   }
 
   this.draw = function() {
