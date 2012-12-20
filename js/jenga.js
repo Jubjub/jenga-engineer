@@ -2,7 +2,12 @@
 var rad_to_deg = 180 / Math.PI;
 var deg_to_rad = Math.PI / 180;
 var verlet_steps = 10;
-var damping = 0.995;
+var damping = 1;
+
+/* utils */
+function vec2_angle(v1, v2) {
+  return Math.atan2(v2.y - v1.y, v2.x - v1.x) * rad_to_deg;
+}
 
 /* verlet physics */
 function simulateBlocks(blocks) {
@@ -20,6 +25,8 @@ function simulateBlocks(blocks) {
         var dy = atom.y - oldatom.y;
         dx += block.acceleration.x * dt * dt;
         dy += block.acceleration.y * dt * dt;
+        dx *= damping;
+        dy *= damping;
         oldatom.x = atom.x;
         oldatom.y = atom.y;
         atom.x += dx;
@@ -48,10 +55,16 @@ function simulateBlocks(blocks) {
         b.y += diff * dy;
       }
       /* extract position and rotation from physical points */
-      block.sprite.x = block.atoms[0].x;
-      block.sprite.y = block.atoms[0].y;
-      block.sprite.angle = Math.atan2(block.atoms[1].y - block.atoms[0].y,
-                                      block.atoms[1].x - block.atoms[0].x);
+      // TODO: what. how. huh. why does this work. it shouldn't do that. why
+      // does it do that. stop doing that. fuck you javascript, fuck you
+      // canvas, stop messing with my coordinate systems. why must you ruin
+      // everything?
+      block.sprite.x = block.atoms[2].x;
+      block.sprite.y = block.atoms[2].y;
+      var dir = {x : block.atoms[0].x - block.atoms[1].x,
+                 y : block.atoms[0].y - block.atoms[1].y};
+
+      block.sprite.angle = vec2_angle({x : 1, y : 0}, dir);
       //block.sprite.angle += 45 * dt;
     }
   }
@@ -66,7 +79,7 @@ Block = (function () {
     this.acceleration = {x : 0, y : 2};
     this.atoms = [{x : x, y : y}, {x : x + width, y : y},
                   {x : x + width, y : y + height}, {x : x, y : y + height}];
-    this.oldatoms = [{x : x, y : y }, {x : x + width, y : y},
+    this.oldatoms = [{x : x, y : y + 1 }, {x : x + width, y : y},
                   {x : x + width, y : y + height}, {x : x, y : y + height}];
     var h = Math.sqrt(width * width + height * height);
     this.edges = [[0, 1, width], [1, 2, height], [2, 3, width], [3, 0, height], [0, 2, h]];
@@ -136,6 +149,9 @@ function PlayState() {
 
   this.update = function() {
     simulateBlocks(this.blocks);
+    this.blocks[1].sprite.x = 0;
+    this.blocks[1].sprite.y = 0;
+
     if (isDown("up") || isDown("w"))
       this.test.y -= 15;
     if (isDown("down") || isDown("s"))
@@ -148,6 +164,16 @@ function PlayState() {
 
   this.draw = function() {
     clearCanvas();
+    /*
+    for (var i = 0; i < this.blocks.length; i++) {
+      var block = this.blocks[i];
+      for (var j = 0; j < block.atoms.length; j++) {
+        var atom = block.atoms[j];
+        context.fillStyle = "black";
+        context.fillRect(atom.x, atom.y, 3, 3);
+      }
+    }
+    */
     this.test.draw();
     this.blockss.draw();
     this.proc.draw();
