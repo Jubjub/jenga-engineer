@@ -1,8 +1,8 @@
 /* constants */
 var rad_to_deg = 180 / Math.PI;
 var deg_to_rad = Math.PI / 180;
-var verlet_steps = 10;
-var damping = 1;
+var verlet_steps = 5;
+var damping = 0.9994;
 
 /* utils */
 function vec2_angle(v1, v2) {
@@ -149,9 +149,6 @@ function PlayState() {
 
   this.update = function() {
     simulateBlocks(this.blocks);
-    this.blocks[1].sprite.x = 0;
-    this.blocks[1].sprite.y = 0;
-
     if (isDown("up") || isDown("w"))
       this.test.y -= 15;
     if (isDown("down") || isDown("s"))
