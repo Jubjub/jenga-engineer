@@ -1,30 +1,59 @@
 /* constants */
-var rad_to_deg = 57.295779513082323;
-var deg_to_rad = 0.0174532925199432957;
+var rad_to_deg = 180 / Math.PI;
+var deg_to_rad = Math.PI / 180;
+var verlet_steps = 10;
+var damping = 0.995;
 
 /* verlet physics */
 function simulateBlocks(blocks) {
   // TODO: get some actual time values
-  var dt = 0.1666666;
-  for (var i = 0; i < blocks.length; i++) {
-    var block = blocks[i];
-    /* simple verlet integration */
-    for (var j = 0; j < 4; j++) {
-      var dx = block.atoms[j].x - block.oldatoms[j].x;
-      var dy = block.atoms[j].y - block.oldatoms[j].y;
-      dx += block.acceleration.x * dt * dt;
-      dy += block.acceleration.y * dt * dt;
-      block.oldatoms[j].x = block.atoms[j].x;
-      block.oldatoms[j].y = block.atoms[j].y;
-      block.atoms[j].x += dx;
-      block.atoms[j].y += dy;
+  var dt = 0.16666666666;
+  dt /= verlet_steps;
+  for (var n = 0; n < verlet_steps; n++) {
+    for (var i = 0; i < blocks.length; i++) {
+      var block = blocks[i];
+      /* simple verlet integration */
+      for (var j = 0; j < block.atoms.length; j++) {
+        var atom = block.atoms[j];
+        var oldatom = block.oldatoms[j];
+        var dx = atom.x - oldatom.x;
+        var dy = atom.y - oldatom.y;
+        dx += block.acceleration.x * dt * dt;
+        dy += block.acceleration.y * dt * dt;
+        oldatom.x = atom.x;
+        oldatom.y = atom.y;
+        atom.x += dx;
+        atom.y += dy;
+        if (atom.y > canvas.height - 20) {
+          atom.y = canvas.height - 20;
+        }
+      }
+      /* satisfy them constraints */
+      for (var j = 0; j < block.edges.length; j++) {
+        var edge = block.edges[j];
+        var a = block.atoms[edge[0]];
+        var b = block.atoms[edge[1]];
+        var rl = edge[2];
+        var dx = a.x - b.x;
+        var dy = a.y - b.y;
+        var l = Math.sqrt(dx * dx + dy * dy);
+        var diff = l - rl;
+        dx /= l;
+        dy /= l;
+        dx *= 0.5;
+        dy *= 0.5;
+        a.x -= diff * dx;
+        a.y -= diff * dy;
+        b.x += diff * dx;
+        b.y += diff * dy;
+      }
+      /* extract position and rotation from physical points */
+      block.sprite.x = block.atoms[0].x;
+      block.sprite.y = block.atoms[0].y;
+      block.sprite.angle = Math.atan2(block.atoms[1].y - block.atoms[0].y,
+                                      block.atoms[1].x - block.atoms[0].x);
+      //block.sprite.angle += 45 * dt;
     }
-    /* extract position and rotation from physical points */
-    block.sprite.x = block.atoms[0].x;
-    block.sprite.y = block.atoms[0].y;
-    //block.sprite.setAngle(Math.atan2(block.atoms[1].y - block.atoms[0].y,
-    //                                 block.atoms[1].x - block.atoms[0].x));
-    block.sprite.angle += 45 * dt;
   }
 }
 
@@ -32,13 +61,15 @@ function simulateBlocks(blocks) {
 Block = (function () {
   function constructor(x, y, width, height) {
     this.sprite = new Sprite(null, x, y);
-    var color = '#' + Math.floor(Math.random()*16777215).toString(16); 
+    var color = '#' + Math.floor(Math.random() * 16777215).toString(16); 
     this.sprite.makeGraphic(width, height, color);
-    this.acceleration = {x : 0, y : 12};
+    this.acceleration = {x : 0, y : 2};
     this.atoms = [{x : x, y : y}, {x : x + width, y : y},
                   {x : x + width, y : y + height}, {x : x, y : y + height}];
-    this.oldatoms = [{x : x, y : y}, {x : x + width, y : y},
+    this.oldatoms = [{x : x, y : y }, {x : x + width, y : y},
                   {x : x + width, y : y + height}, {x : x, y : y + height}];
+    var h = Math.sqrt(width * width + height * height);
+    this.edges = [[0, 1, width], [1, 2, height], [2, 3, width], [3, 0, height], [0, 2, h]];
     preventKeys("space");
   }
 

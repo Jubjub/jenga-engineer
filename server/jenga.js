@@ -1,4 +1,4 @@
-var io = require("socket.io").listen(80);
+var io = require("socket.io").listen(80, '0.0.0.0');
 
 io.sockets.on("connection", function(socket) {
   var address = socket.handshake.address;
