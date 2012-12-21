@@ -1,12 +1,10 @@
 /* constants */
-var rad_to_deg = 180 / Math.PI;
-var deg_to_rad = Math.PI / 180;
 var verlet_steps = 5;
 var damping = 0.9994;
 
 /* utils */
-function vec2_angle(v1, v2) {
-  return Math.atan2(v2.y - v1.y, v2.x - v1.x) * rad_to_deg;
+function vecToAngle(v1, v2) {
+  return Math.atan2(v2.y - v1.y, v2.x - v1.x) * radToDeg;
 }
 
 /* verlet physics */
@@ -14,6 +12,7 @@ function simulateBlocks(blocks) {
   // TODO: get some actual time values
   var dt = 0.16666666666;
   dt /= verlet_steps;
+
   for (var n = 0; n < verlet_steps; n++) {
     for (var i = 0; i < blocks.length; i++) {
       var block = blocks[i];
@@ -35,6 +34,7 @@ function simulateBlocks(blocks) {
           atom.y = canvas.height - 20;
         }
       }
+
       /* satisfy them constraints */
       for (var j = 0; j < block.edges.length; j++) {
         var edge = block.edges[j];
@@ -54,6 +54,7 @@ function simulateBlocks(blocks) {
         b.x += diff * dx;
         b.y += diff * dy;
       }
+
       /* extract position and rotation from physical points */
       // TODO: what. how. huh. why does this work. it shouldn't do that. why
       // does it do that. stop doing that. fuck you javascript, fuck you
@@ -61,20 +62,22 @@ function simulateBlocks(blocks) {
       // everything?
       block.sprite.x = block.atoms[2].x;
       block.sprite.y = block.atoms[2].y;
-      var dir = {x : block.atoms[0].x - block.atoms[1].x,
-                 y : block.atoms[0].y - block.atoms[1].y};
+      var dir = {x: block.atoms[0].x - block.atoms[1].x,
+                 y: block.atoms[0].y - block.atoms[1].y};
 
-      block.sprite.angle = vec2_angle({x : 1, y : 0}, dir);
+      block.sprite.angle = vecToAngle({x: 1, y: 0}, dir);
       //block.sprite.angle += 45 * dt;
     }
   }
 }
 
-/* main game state */
+/* Main game state */
 function PlayState() {
   this.setup = function() {
     this.blocks = [];
     this.blockss = new SpriteList();
+
+    /* Add some test blocks */
     block = new Block(20, 20, 40, 20);
     this.addBlock(block);
     this.addBlock(new Block(40, 80, 80, 10));
@@ -98,6 +101,7 @@ function PlayState() {
 
   this.update = function() {
     simulateBlocks(this.blocks);
+
     if (isDown("up") || isDown("w"))
       this.test.y -= 15;
     if (isDown("down") || isDown("s"))
@@ -119,6 +123,7 @@ function PlayState() {
 
   this.draw = function() {
     clearCanvas();
+
     /*
     for (var i = 0; i < this.blocks.length; i++) {
       var block = this.blocks[i];
