@@ -84,7 +84,7 @@ function simulateBlocks(blocks) {
 Block = (function () {
   function constructor(x, y, width, height) {
     this.sprite = new Sprite(null, x, y);
-    var color = '#' + Math.floor(Math.random() * 16777215).toString(16); 
+    var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
     this.sprite.makeGraphic(width, height, color);
     this.acceleration = {x : 0, y : 2};
     this.atoms = [{x : x, y : y}, {x : x + width, y : y},
@@ -178,6 +178,9 @@ function PlayState() {
     this.proc = new Sprite(null, 300, 300);
     this.proc.makeGraphic(160, 20, "#ccff11");
     this.proc.stampText(0, 0, "hello!", 16, "Calibri", "#333333");
+
+    this.canInsertBlock = true;
+
     preventKeys("down", "right", "left", "right", "space");
   }
 
@@ -196,6 +199,15 @@ function PlayState() {
       this.test.x += 10;
     if (isDown("left") || isDown("a"))
       this.test.x -= 10;
+
+    if (isMouseDown("left")) {
+      if (this.canInsertBlock) {
+        this.addBlock(new Block(mouseX, mouseY, 100, 100));
+        this.canInsertBlock = false;
+      }
+    } else {
+      this.canInsertBlock = true;
+    }
   }
 
   this.draw = function() {
@@ -218,4 +230,3 @@ function PlayState() {
 
 var state = new MenuState();
 switchState(state);
-
