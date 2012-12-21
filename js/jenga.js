@@ -16,12 +16,14 @@ function simulateBlocks(blocks) {
   for (var n = 0; n < verlet_steps; n++) {
     for (var i = 0; i < blocks.length; i++) {
       var block = blocks[i];
-      /* simple verlet integration */
+
+      /* Simple verlet integration */
       for (var j = 0; j < block.atoms.length; j++) {
         var atom = block.atoms[j];
         var oldatom = block.oldatoms[j];
         var dx = atom.x - oldatom.x;
         var dy = atom.y - oldatom.y;
+
         dx += block.acceleration.x * dt * dt;
         dy += block.acceleration.y * dt * dt;
         dx *= damping;
@@ -30,6 +32,7 @@ function simulateBlocks(blocks) {
         oldatom.y = atom.y;
         atom.x += dx;
         atom.y += dy;
+
         if (atom.y > canvas.height - 20) {
           atom.y = canvas.height - 20;
         }
@@ -45,6 +48,7 @@ function simulateBlocks(blocks) {
         var dy = a.y - b.y;
         var l = Math.sqrt(dx * dx + dy * dy);
         var diff = l - rl;
+
         dx /= l;
         dy /= l;
         dx *= 0.5;
