@@ -1,28 +1,29 @@
 <!doctype html>
 <html>
-    <head>
-        <title>jenga-engineer</title>
-        <style media="screen" type="text/css">
-            body {
-                background-color: #222222;
-            }
-            #canvas {
-                background-color: #ffffff;
-                border: 1px solid #aaaaaa;
-                width: 640px;
-                height: 480px;
-                margin: 60px auto;
-                display: block;
-                position: relative;
-            }
-        </style>
-    </head>
-    <body onload='init();'>
-        <canvas id='canvas' width='640' height='480'>
-        Your browser needs to support canvas to play this game!
-        </canvas>
-        <script type='text/javascript' src='js/socket.io.js'></script>
-        <script type='text/javascript' src='js/pentagine/pentagine.js'></script>
-        <script type='text/javascript' src='js/jenga.js'></script>
-    </body>
+  <head>
+    <title>jenga-engineer</title>
+    <style media="screen" type="text/css">
+      body {
+        background-color: #222222;
+      }
+      #canvas {
+        background-color: #ffffff;
+        border: 1px solid #aaaaaa;
+        width: 640px;
+        height: 480px;
+        margin: 60px auto;
+        display: block;
+        position: relative;
+      }
+    </style>
+  </head>
+  <body onload="init();">
+    <canvas id="canvas" width="640" height="480">
+      Your browser needs to support canvas to play this game!
+    </canvas>
+
+    <script type="text/javascript" src="js/socket.io.js"></script>
+    <script type="text/javascript" src="js/pentagine/pentagine.js"></script>
+    <script type="text/javascript" src="js/jenga.js"></script>
+  </body>
 </html>
