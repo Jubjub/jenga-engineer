@@ -5,13 +5,21 @@ var verlet_steps = 5;
 var damping = 0.9994;
 
 /* utils */
-function vec2_angle(v1, v2) {
+function vec2Angle(v1, v2) {
   return Math.atan2(v2.y - v1.y, v2.x - v1.x) * rad_to_deg;
+}
+
+function vec2Dot(v1, v2) {
+    return (v1.x * v2.x + v1.y * v2.y);
+}
+
+function vec2Length(v1, v2) {
+  return Math.sqrt(v1.x * v2.x + v1.y * v2.y);
 }
 
 /* verlet physics */
 function simulateBlocks(blocks) {
-  // TODO: get some actual time values
+  // TODO: get some actual time values.
   var dt = 0.16666666666;
   dt /= verlet_steps;
   for (var n = 0; n < verlet_steps; n++) {
@@ -37,6 +45,7 @@ function simulateBlocks(blocks) {
       }
       /* satisfy them constraints */
       for (var j = 0; j < block.edges.length; j++) {
+        /* edge constraints */
         var edge = block.edges[j];
         var a = block.atoms[edge[0]];
         var b = block.atoms[edge[1]];
@@ -53,6 +62,7 @@ function simulateBlocks(blocks) {
         a.y -= diff * dy;
         b.x += diff * dx;
         b.y += diff * dy;
+        /* collision constraints */
       }
       /* extract position and rotation from physical points */
       // TODO: what. how. huh. why does this work. it shouldn't do that. why
@@ -64,7 +74,7 @@ function simulateBlocks(blocks) {
       var dir = {x : block.atoms[0].x - block.atoms[1].x,
                  y : block.atoms[0].y - block.atoms[1].y};
 
-      block.sprite.angle = vec2_angle({x : 1, y : 0}, dir);
+      block.sprite.angle = vec2Angle({x : 1, y : 0}, dir);
       //block.sprite.angle += 45 * dt;
     }
   }
@@ -90,6 +100,35 @@ Block = (function () {
     update: function() {
 
     },
+
+      project_to_axis: function(axis) {
+      var dot = vec2Dot(axis, this.atoms[0]);
+      var min = dot;
+      var max = dot;
+      for (var i = 1; i < this.atoms.length; i++) {
+        dot = vec2Dot(axis, this.atoms[i]);
+        min = Math.min(min, dot);
+        max = Math.max(max, dot);
+      }
+      return [min, max];
+    },
+
+    collide: function(other) {
+      for (var i = 0; i < this.edges.length + other.edges.length; i++) {
+        var edge;
+        var obj;
+        if (i < this.edges.length) {
+          obj = this;
+          edge = this.edges[i];
+        } else {
+          obj = other;
+          edge = other.edges[i - this.edges.length];
+        }
+        var atom1 = other.atoms[edge[0]];
+        var atom2 = other.atoms[edge[1]];
+        //var axis = {x : 
+      }
+    }
   }
 
   return constructor;
