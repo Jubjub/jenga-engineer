@@ -90,14 +90,13 @@ function simulateBlocks(blocks) {
             var hit = blocks[k].collide(blocks[r]);
             if (hit) {
               for (var g = 0; g < blocks[k].atoms.length; g++) {
-                blocks[k].atoms[i].x += hit.normal.x * (hit.depth / -2);
-                blocks[k].atoms[i].y += hit.normal.y * (hit.depth / -2);
+                blocks[k].atoms[g].x += hit.normal.x * (hit.depth / -2);
+                blocks[k].atoms[g].y += hit.normal.y * (hit.depth / -2);
               }
               for (var g = 0; g < blocks[r].atoms.length; g++) {
-                blocks[r].atoms[i].x += hit.normal.x * (hit.depth / 2);
-                blocks[r].atoms[i].y += hit.normal.y * (hit.depth / 2);
+                blocks[r].atoms[g].x += hit.normal.x * (hit.depth / 2);
+                blocks[r].atoms[g].y += hit.normal.y * (hit.depth / 2);
               }
-              
             }
           }
         }

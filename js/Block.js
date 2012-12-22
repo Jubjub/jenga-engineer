@@ -7,7 +7,7 @@ Block = (function () {
     this.acceleration = {x : 0, y : 2};
     this.atoms = [{x : x, y : y}, {x : x + width, y : y},
                   {x : x + width, y : y + height}, {x : x, y : y + height}];
-    this.oldatoms = [{x : x, y : y + 1 }, {x : x + width, y : y},
+    this.oldatoms = [{x : x, y : y }, {x : x + width, y : y},
                   {x : x + width, y : y + height}, {x : x, y : y + height}];
     var h = Math.sqrt(width * width + height * height);
     this.edges = [[0, 1, width], [1, 2, height], [2, 3, width], [3, 0, height], [0, 2, h]];
@@ -33,7 +33,7 @@ Block = (function () {
 
     collide: function(other) {
       var collisionInfo = {};
-      var minDistance = 1000000;
+      var minDistance = 100000000;
       for (var i = 0; i < this.edges.length + other.edges.length; i++) {
         var edge;
         var obj;
