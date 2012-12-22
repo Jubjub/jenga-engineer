@@ -1,20 +1,34 @@
 /* constants */
-var rad_to_deg = 180 / Math.PI;
-var deg_to_rad = Math.PI / 180;
 var verlet_steps = 5;
 var damping = 0.9994;
+var radToDeg = 180 / Math.PI;
+var degToRad = Math.PI / 180;
 
 /* utils */
 function vec2Angle(v1, v2) {
-  return Math.atan2(v2.y - v1.y, v2.x - v1.x) * rad_to_deg;
+  return Math.atan2(v2.y - v1.y, v2.x - v1.x) * radToDeg;
 }
 
 function vec2Dot(v1, v2) {
     return (v1.x * v2.x + v1.y * v2.y);
 }
 
-function vec2Length(v1, v2) {
-  return Math.sqrt(v1.x * v2.x + v1.y * v2.y);
+function vec2Length(v1) {
+  return Math.sqrt(v1.x * v1.x + v1.y * v1.y);
+}
+
+function vec2Normalize(v1) {
+  var l = vec2Length(v1);
+  v1.x /= l;
+  v1.y /= l;
+}
+
+function intervalDistance(proj1, proj2) {
+  if (proj1[0] < proj2[0]) {
+    return proj2[0] - proj1[1];
+  } else {
+    return proj1[0] - proj2[1];
+  }
 }
 
 /* verlet physics */
@@ -22,15 +36,18 @@ function simulateBlocks(blocks) {
   // TODO: get some actual time values.
   var dt = 0.16666666666;
   dt /= verlet_steps;
+
   for (var n = 0; n < verlet_steps; n++) {
     for (var i = 0; i < blocks.length; i++) {
       var block = blocks[i];
-      /* simple verlet integration */
+
+      /* Simple verlet integration */
       for (var j = 0; j < block.atoms.length; j++) {
         var atom = block.atoms[j];
         var oldatom = block.oldatoms[j];
         var dx = atom.x - oldatom.x;
         var dy = atom.y - oldatom.y;
+
         dx += block.acceleration.x * dt * dt;
         dy += block.acceleration.y * dt * dt;
         dx *= damping;
@@ -39,10 +56,12 @@ function simulateBlocks(blocks) {
         oldatom.y = atom.y;
         atom.x += dx;
         atom.y += dy;
+
         if (atom.y > canvas.height - 20) {
           atom.y = canvas.height - 20;
         }
       }
+
       /* satisfy them constraints */
       for (var j = 0; j < block.edges.length; j++) {
         /* edge constraints */
@@ -54,6 +73,7 @@ function simulateBlocks(blocks) {
         var dy = a.y - b.y;
         var l = Math.sqrt(dx * dx + dy * dy);
         var diff = l - rl;
+
         dx /= l;
         dy /= l;
         dx *= 0.5;
@@ -63,7 +83,17 @@ function simulateBlocks(blocks) {
         b.x += diff * dx;
         b.y += diff * dy;
         /* collision constraints */
+        // TODO: space partitioning. pretty please.
+        for (var k = 0; k < blocks.length; k++) {
+          /* seriously running out of single letter vars here */
+          for (var r = 0; r < blocks.length; r++) {
+            if (blocks[k].collide(blocks[r])) {
+              console.log("collision biatch");
+            }
+          }
+        }
       }
+
       /* extract position and rotation from physical points */
       // TODO: what. how. huh. why does this work. it shouldn't do that. why
       // does it do that. stop doing that. fuck you javascript, fuck you
@@ -71,8 +101,8 @@ function simulateBlocks(blocks) {
       // everything?
       block.sprite.x = block.atoms[2].x;
       block.sprite.y = block.atoms[2].y;
-      var dir = {x : block.atoms[0].x - block.atoms[1].x,
-                 y : block.atoms[0].y - block.atoms[1].y};
+      var dir = {x: block.atoms[0].x - block.atoms[1].x,
+                 y: block.atoms[0].y - block.atoms[1].y};
 
       block.sprite.angle = vec2Angle({x : 1, y : 0}, dir);
       //block.sprite.angle += 45 * dt;
@@ -101,14 +131,14 @@ Block = (function () {
 
     },
 
-      project_to_axis: function(axis) {
+    projectToAxis: function(axis) {
       var dot = vec2Dot(axis, this.atoms[0]);
       var min = dot;
       var max = dot;
       for (var i = 1; i < this.atoms.length; i++) {
         dot = vec2Dot(axis, this.atoms[i]);
-        min = Math.min(min, dot);
-        max = Math.max(max, dot);
+        min = Math.min(dot, min);
+        max = Math.max(dot, max);
       }
       return [min, max];
     },
@@ -124,10 +154,18 @@ Block = (function () {
           obj = other;
           edge = other.edges[i - this.edges.length];
         }
-        var atom1 = other.atoms[edge[0]];
-        var atom2 = other.atoms[edge[1]];
-        //var axis = {x : 
+        var atom1 = obj.atoms[edge[0]];
+        var atom2 = obj.atoms[edge[1]];
+        var axis = {x : atom1.y - atom2.y, y : atom2.x - atom1.x};
+        vec2Normalize(axis);
+        var proj1 = this.projectToAxis(axis);
+        var proj2 = other.projectToAxis(axis);
+        var distance = intervalDistance(proj1, proj2);
+        if (distance > 0.0) {
+          return false;
+        }
       }
+      return true;
     }
   }
 
@@ -163,13 +201,14 @@ function MenuState() {
   }
 }
 
-/* main game state */
+/* Main game state */
 function PlayState() {
   this.setup = function() {
     this.blocks = [];
     this.blockss = new SpriteList();
-    block = new Block(20, 20, 40, 20);
-    this.addBlock(block);
+    /* Add some test blocks */
+    //block = new Block(20, 20, 40, 20);
+    //this.addBlock(block);
     this.addBlock(new Block(40, 80, 80, 10));
     this.addBlock(new Block(140, 80, 80, 10));
     this.addBlock(new Block(240, 80, 80, 10));
@@ -191,6 +230,7 @@ function PlayState() {
 
   this.update = function() {
     simulateBlocks(this.blocks);
+
     if (isDown("up") || isDown("w"))
       this.test.y -= 15;
     if (isDown("down") || isDown("s"))
@@ -212,6 +252,7 @@ function PlayState() {
 
   this.draw = function() {
     clearCanvas();
+
     /*
     for (var i = 0; i < this.blocks.length; i++) {
       var block = this.blocks[i];
