@@ -1,5 +1,4 @@
 /* basic construction piece */
-
 Block = (function () {
   function constructor(x, y, width, height) {
     this.sprite = new Sprite(null, x, y);
@@ -19,6 +18,49 @@ Block = (function () {
     update: function() {
 
     },
+
+    projectToAxis: function(axis) {
+      var dot = vec2Dot(axis, this.atoms[0]);
+      var min = dot;
+      var max = dot;
+      for (var i = 1; i < this.atoms.length; i++) {
+        dot = vec2Dot(axis, this.atoms[i]);
+        min = Math.min(dot, min);
+        max = Math.max(dot, max);
+      }
+      return [min, max];
+    },
+
+    collide: function(other) {
+      var collisionInfo = {};
+      var minDistance = 1000000;
+      for (var i = 0; i < this.edges.length + other.edges.length; i++) {
+        var edge;
+        var obj;
+        if (i < this.edges.length) {
+          obj = this;
+          edge = this.edges[i];
+        } else {
+          obj = other;
+          edge = other.edges[i - this.edges.length];
+        }
+        var atom1 = obj.atoms[edge[0]];
+        var atom2 = obj.atoms[edge[1]];
+        var axis = {x : atom1.y - atom2.y, y : atom2.x - atom1.x};
+        vec2Normalize(axis);
+        var proj1 = this.projectToAxis(axis);
+        var proj2 = other.projectToAxis(axis);
+        var distance = intervalDistance(proj1, proj2);
+        if (distance > 0) {
+          return false;
+        } else if (Math.abs(distance) < minDistance) {
+          minDistance = Math.abs(distance);
+          collisionInfo.normal = axis;
+        }
+      }
+      collisionInfo.depth = minDistance;
+      return collisionInfo;
+    }
   }
 
   return constructor;

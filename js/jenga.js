@@ -87,8 +87,17 @@ function simulateBlocks(blocks) {
         for (var k = 0; k < blocks.length; k++) {
           /* seriously running out of single letter vars here */
           for (var r = 0; r < blocks.length; r++) {
-            if (blocks[k].collide(blocks[r])) {
-              console.log("collision biatch");
+            var hit = blocks[k].collide(blocks[r]);
+            if (hit) {
+              for (var g = 0; g < blocks[k].atoms.length; g++) {
+                blocks[k].atoms[i].x += hit.normal.x * (hit.depth / -2);
+                blocks[k].atoms[i].y += hit.normal.y * (hit.depth / -2);
+              }
+              for (var g = 0; g < blocks[r].atoms.length; g++) {
+                blocks[r].atoms[i].x += hit.normal.x * (hit.depth / 2);
+                blocks[r].atoms[i].y += hit.normal.y * (hit.depth / 2);
+              }
+              
             }
           }
         }
@@ -107,97 +116,6 @@ function simulateBlocks(blocks) {
       block.sprite.angle = vec2Angle({x : 1, y : 0}, dir);
       //block.sprite.angle += 45 * dt;
     }
-  }
-}
-
-/* basic construction piece */
-Block = (function () {
-  function constructor(x, y, width, height) {
-    this.sprite = new Sprite(null, x, y);
-    var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
-    this.sprite.makeGraphic(width, height, color);
-    this.acceleration = {x : 0, y : 2};
-    this.atoms = [{x : x, y : y}, {x : x + width, y : y},
-                  {x : x + width, y : y + height}, {x : x, y : y + height}];
-    this.oldatoms = [{x : x, y : y + 1 }, {x : x + width, y : y},
-                  {x : x + width, y : y + height}, {x : x, y : y + height}];
-    var h = Math.sqrt(width * width + height * height);
-    this.edges = [[0, 1, width], [1, 2, height], [2, 3, width], [3, 0, height], [0, 2, h]];
-    preventKeys("space");
-  }
-
-  constructor.prototype = {
-    update: function() {
-
-    },
-
-    projectToAxis: function(axis) {
-      var dot = vec2Dot(axis, this.atoms[0]);
-      var min = dot;
-      var max = dot;
-      for (var i = 1; i < this.atoms.length; i++) {
-        dot = vec2Dot(axis, this.atoms[i]);
-        min = Math.min(dot, min);
-        max = Math.max(dot, max);
-      }
-      return [min, max];
-    },
-
-    collide: function(other) {
-      for (var i = 0; i < this.edges.length + other.edges.length; i++) {
-        var edge;
-        var obj;
-        if (i < this.edges.length) {
-          obj = this;
-          edge = this.edges[i];
-        } else {
-          obj = other;
-          edge = other.edges[i - this.edges.length];
-        }
-        var atom1 = obj.atoms[edge[0]];
-        var atom2 = obj.atoms[edge[1]];
-        var axis = {x : atom1.y - atom2.y, y : atom2.x - atom1.x};
-        vec2Normalize(axis);
-        var proj1 = this.projectToAxis(axis);
-        var proj2 = other.projectToAxis(axis);
-        var distance = intervalDistance(proj1, proj2);
-        if (distance > 0.0) {
-          return false;
-        }
-      }
-      return true;
-    }
-  }
-
-  return constructor;
-})();
-
-/* intro menu state, including setting up the network link */
-function MenuState() {
-  this.setup = function() {
-    this.global = new SpriteList();
-    this.label = new Sprite(null, 50, 0);
-    this.label.makeLabel("Jenga Engineer", 70, "Verdana", "black");
-    this.global.push(this.label);
-    preventKeys("down", "right", "left", "right", "space");
-    /* establish a link to the server */
-    socket = io.connect("http://localhost");
-    socket.emit("hello", { source: "development" });
-  }
-
-  this.update = function() {
-    if (isDown("space")) {
-      var state = new PlayState();
-      switchState(state);
-    }
-    if (isDown("space")) {
-
-    }
-  }
-
-  this.draw = function() {
-    clearCanvas();
-    this.global.draw();
   }
 }
 
