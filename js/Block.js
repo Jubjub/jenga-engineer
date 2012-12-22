@@ -11,7 +11,7 @@ Block = (function () {
                   {x : x + width, y : y + height}, {x : x, y : y + height}];
     var h = Math.sqrt(width * width + height * height);
     this.edges = [[0, 1, width], [1, 2, height], [2, 3, width], [3, 0, height], [0, 2, h]];
-    preventKeys("space");
+    this.computeCenter();
   }
 
   constructor.prototype = {
@@ -56,10 +56,50 @@ Block = (function () {
         } else if (Math.abs(distance) < minDistance) {
           minDistance = Math.abs(distance);
           collisionInfo.normal = axis;
+          collisionInfo.object = obj;
+          collisionInfo.edge = edge;
         }
       }
       collisionInfo.depth = minDistance;
+      // TODO: maybe cache this?
+      this.computeCenter();
+      other.computeCenter();
+      var b1 = this;
+      var b2 = other;
+      if (collisionInfo.object != b2) {
+        var tmp = b2;
+        b2 = b1;
+        b1 = tmp;
+      }
+      collisionInfo.b1 = b1;
+      collisionInfo.b2 = b2;
+      var ddc = {x : b1.center.x - b2.center.x, y : b1.center.y - b2.center.y};
+      var nc = vec2Dot(collisionInfo.normal, ddc);
+      var sign = nc && nc / Math.abs(nc);
+      if (sign != 1) {
+        collisionInfo.normal.x = -collisionInfo.normal.x;
+        collisionInfo.normal.y = -collisionInfo.normal.y;
+      }
+      var smallestD = 100000;
+      for (var i = 0; i < b1.atoms.length; i++) {
+        var dr = {x : b1.atoms[i].x - b2.center.x, y : b1.atoms[i].y - b2.center.y};
+        var ddd = vec2Dot(collisionInfo.normal, dr);
+        if (ddd < smallestD) {
+          smallestD = ddd;
+          collisionInfo.atom = b1.atoms[i];
+        }
+      }
       return collisionInfo;
+    },
+
+    computeCenter: function() {
+      this.center = {x : 0, y : 0};
+      for (var i = 0; i < this.atoms.length; i++) {
+        this.center.x += this.atoms[i].x;
+        this.center.y += this.atoms[i].y;
+      }
+      this.center.x /= this.atoms.length;
+      this.center.y /= this.atoms.length;
     }
   }
 

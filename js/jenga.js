@@ -10,7 +10,7 @@ function vec2Angle(v1, v2) {
 }
 
 function vec2Dot(v1, v2) {
-    return (v1.x * v2.x + v1.y * v2.y);
+  return (v1.x * v2.x + v1.y * v2.y);
 }
 
 function vec2Length(v1) {
@@ -36,18 +36,15 @@ function simulateBlocks(blocks) {
   // TODO: get some actual time values.
   var dt = 0.16666666666;
   dt /= verlet_steps;
-
   for (var n = 0; n < verlet_steps; n++) {
     for (var i = 0; i < blocks.length; i++) {
       var block = blocks[i];
-
       /* Simple verlet integration */
       for (var j = 0; j < block.atoms.length; j++) {
         var atom = block.atoms[j];
         var oldatom = block.oldatoms[j];
         var dx = atom.x - oldatom.x;
         var dy = atom.y - oldatom.y;
-
         dx += block.acceleration.x * dt * dt;
         dy += block.acceleration.y * dt * dt;
         dx *= damping;
@@ -56,12 +53,10 @@ function simulateBlocks(blocks) {
         oldatom.y = atom.y;
         atom.x += dx;
         atom.y += dy;
-
         if (atom.y > canvas.height - 20) {
           atom.y = canvas.height - 20;
         }
       }
-
       /* satisfy them constraints */
       for (var j = 0; j < block.edges.length; j++) {
         /* edge constraints */
@@ -73,7 +68,6 @@ function simulateBlocks(blocks) {
         var dy = a.y - b.y;
         var l = Math.sqrt(dx * dx + dy * dy);
         var diff = l - rl;
-
         dx /= l;
         dy /= l;
         dx *= 0.5;
@@ -87,21 +81,31 @@ function simulateBlocks(blocks) {
         for (var k = 0; k < blocks.length; k++) {
           /* seriously running out of single letter vars here */
           for (var r = 0; r < blocks.length; r++) {
+            if (blocks[k] == blocks[r]) {
+              continue;
+            }
             var hit = blocks[k].collide(blocks[r]);
             if (hit) {
-              for (var g = 0; g < blocks[k].atoms.length; g++) {
-                blocks[k].atoms[g].x += hit.normal.x * (hit.depth / -2);
-                blocks[k].atoms[g].y += hit.normal.y * (hit.depth / -2);
+              var cv = {x : hit.normal.x * hit.depth, y : hit.normal.y * hit.depth};
+              hit.atom.x += cv.x * -0.5;
+              hit.atom.y += cv.y * 0.5;
+              var e1 = hit.b2.atoms[hit.edge[0]];
+              var e2 = hit.b2.atoms[hit.edge[1]];
+              var t;
+              if (Math.abs(e1.x - e2.x) > Math.abs(e1.y - e2.y)) {
+                t = (hit.atom.x - cv.x - e1.x) / (e2.x - e1.x);
+              } else {
+                t = (hit.atom.y - cv.y - e1.position.y) / (e2.y - e1.y);
               }
-              for (var g = 0; g < blocks[r].atoms.length; g++) {
-                blocks[r].atoms[g].x += hit.normal.x * (hit.depth / 2);
-                blocks[r].atoms[g].y += hit.normal.y * (hit.depth / 2);
-              }
+              var lambda = 1 / (t * t + (1 - t) * (1 - t));
+              e1.x -= cv.x * (1 - t) * 0.5 * lambda;
+              e1.y -= cv.y * (1 - t) * 0.5 * lambda;
+              e2.x -= cv.x * t * 0.5 * lambda;
+              e2.y -= cv.y * t * 0.5 * lambda;
             }
           }
         }
       }
-
       /* extract position and rotation from physical points */
       // TODO: what. how. huh. why does this work. it shouldn't do that. why
       // does it do that. stop doing that. fuck you javascript, fuck you
@@ -113,7 +117,6 @@ function simulateBlocks(blocks) {
                  y: block.atoms[0].y - block.atoms[1].y};
 
       block.sprite.angle = vec2Angle({x : 1, y : 0}, dir);
-      //block.sprite.angle += 45 * dt;
     }
   }
 }
@@ -134,10 +137,8 @@ function PlayState() {
     this.proc = new Sprite(null, 300, 300);
     this.proc.makeGraphic(160, 20, "#ccff11");
     this.proc.stampText(0, 0, "hello!", 16, "Calibri", "#333333");
-
     this.canInsertBlock = true;
-
-    preventKeys("down", "right", "left", "right", "space");
+    preventKeys("down", "right", "left", "right", "space", "r");
   }
 
   this.addBlock = function(block) {
@@ -147,7 +148,6 @@ function PlayState() {
 
   this.update = function() {
     simulateBlocks(this.blocks);
-
     if (isDown("up") || isDown("w"))
       this.test.y -= 15;
     if (isDown("down") || isDown("s"))
@@ -156,10 +156,11 @@ function PlayState() {
       this.test.x += 10;
     if (isDown("left") || isDown("a"))
       this.test.x -= 10;
-
+    if (isDown("r"))
+      switchState(new PlayState());
     if (isMouseDown("left")) {
       if (this.canInsertBlock) {
-        this.addBlock(new Block(mouseX, mouseY, 100, 100));
+        this.addBlock(new Block(mouseX, mouseY, 100, 25));
         this.canInsertBlock = false;
       }
     } else {
@@ -169,7 +170,6 @@ function PlayState() {
 
   this.draw = function() {
     clearCanvas();
-
     /*
     for (var i = 0; i < this.blocks.length; i++) {
       var block = this.blocks[i];

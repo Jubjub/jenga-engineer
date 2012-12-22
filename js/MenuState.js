@@ -16,9 +16,6 @@ function MenuState() {
       var state = new PlayState();
       switchState(state);
     }
-    if (isDown("space")) {
-
-    }
   }
 
   this.draw = function() {
