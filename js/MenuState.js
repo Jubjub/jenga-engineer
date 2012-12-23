@@ -1,4 +1,5 @@
-/* intro menu state, including setting up the network link */
+/* Title screen menu state, sets up the network link */
+
 function MenuState() {
   this.setup = function() {
     this.global = new SpriteList();
@@ -6,7 +7,8 @@ function MenuState() {
     this.label.makeLabel("Jenga Engineer", 70, "Verdana", "black");
     this.global.push(this.label);
     preventKeys("down", "right", "left", "right", "space");
-    /* establish a link to the server */
+
+    /* Establish a link to the server */
     socket = io.connect("http://localhost");
     socket.emit("hello", { source: "development" });
   }
