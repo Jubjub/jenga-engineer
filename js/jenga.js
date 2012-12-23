@@ -57,6 +57,13 @@ function simulateBlocks(blocks) {
 
         dx += block.acceleration.x * dt * dt;
         dy += block.acceleration.y * dt * dt;
+
+        /* kinetic friction */
+        if (block.touching) {
+          dx += (dx * -0.01);
+          dy += (dy * -0.01);
+        }
+
         dx *= damping;
         dy *= damping;
 
@@ -65,6 +72,7 @@ function simulateBlocks(blocks) {
         atom.x += dx;
         atom.y += dy;
 
+        /* world lower bound, much cheaper than colliding */
         if (atom.y > canvas.height - 20) {
           atom.y = canvas.height - 20;
         }
@@ -208,7 +216,7 @@ function PlayState() {
     }
     */
 
-    drawString(this.blocks.length.toString(), 10, 10, "#000");
+    drawString(this.blocks.length.toString(), 10, 10, "#000000");
     
     this.test.draw();
     this.blockss.draw();

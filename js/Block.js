@@ -11,6 +11,7 @@ Block = (function () {
                   {x : x + width, y : y + height}, {x : x, y : y + height}];
     var h = Math.sqrt(width * width + height * height);
     this.edges = [[0, 1, width], [1, 2, height], [2, 3, width], [3, 0, height], [0, 2, h]];
+    this.touching = false;
     this.computeCenter();
   }
 
@@ -33,6 +34,7 @@ Block = (function () {
     },
 
     collide: function(other) {
+      this.touching = false;
       var radius1 = Math.max(this.width, this.height);
       var radius2 = Math.max(other.width, other.height);
       var mindcs = radius1 * radius1 * radius2 * radius2;
@@ -71,6 +73,8 @@ Block = (function () {
       collisionInfo.depth = minDistance;
       var b1 = this;
       var b2 = other;
+      b1.touching = true;
+      b2.touching = true;
       if (collisionInfo.object != b2) {
         var tmp = b2;
         b2 = b1;
