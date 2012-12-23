@@ -36,6 +36,9 @@ function getRandomInt(min, max) {
 }
 
 /* verlet physics */
+/* TODO: introduce mass to the collision response.
+ *       limit max overlapping response per iteration
+ */
 function simulateBlocks(blocks) {
   for (var i = 0; i < blocks.length; i++) {
     blocks[i].computeCenter();
@@ -48,7 +51,6 @@ function simulateBlocks(blocks) {
     for (var i = 0; i < blocks.length; i++) {
       var block = blocks[i];
 
-      /* Simple verlet integration */
       for (var j = 0; j < block.atoms.length; j++) {
         var atom = block.atoms[j];
         var oldatom = block.oldatoms[j];
@@ -59,6 +61,8 @@ function simulateBlocks(blocks) {
         dy += block.acceleration.y * dt * dt;
 
         /* kinetic friction */
+        /* TODO: use movement diff instead of current frame displacement, and
+         * apply only to interacting atoms */
         if (block.touching) {
           dx += (dx * -0.01);
           dy += (dy * -0.01);
@@ -100,12 +104,14 @@ function simulateBlocks(blocks) {
         b.y += diff * dy;
 
         /* Collision constraints */
+        block.computeCenter();
         // TODO: space partitioning. pretty please.
         for (var r = 0; r < blocks.length; r++) {
           if (block == blocks[r]) {
             continue;
           }
 
+          blocks[r].computeCenter();
           var hit = block.collide(blocks[r]);
           if (hit) {
             var cv = {x : hit.normal.x * hit.depth, y : hit.normal.y * hit.depth};
