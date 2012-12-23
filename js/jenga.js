@@ -88,7 +88,7 @@ function simulateBlocks(blocks) {
           var hit = block.collide(blocks[r]);
           if (hit) {
             var cv = {x : hit.normal.x * hit.depth, y : hit.normal.y * hit.depth};
-            hit.atom.x += cv.x * -0.5;
+            hit.atom.x += cv.x * 0.5;
             hit.atom.y += cv.y * 0.5;
             var e1 = hit.b2.atoms[hit.edge[0]];
             var e2 = hit.b2.atoms[hit.edge[1]];
@@ -96,7 +96,7 @@ function simulateBlocks(blocks) {
             if (Math.abs(e1.x - e2.x) > Math.abs(e1.y - e2.y)) {
               t = (hit.atom.x - cv.x - e1.x) / (e2.x - e1.x);
             } else {
-              t = (hit.atom.y - cv.y - e1.position.y) / (e2.y - e1.y);
+              t = (hit.atom.y - cv.y - e1.y) / (e2.y - e1.y);
             }
             var lambda = 1 / (t * t + (1 - t) * (1 - t));
             e1.x -= cv.x * (1 - t) * 0.5 * lambda;
