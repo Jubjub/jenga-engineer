@@ -13,6 +13,7 @@ Block = (function () {
     var h = Math.sqrt(width * width + height * height);
     this.edges = [[0, 1, width], [1, 2, height], [2, 3, width], [3, 0, height], [0, 2, h]];
     this.touching = false;
+    this.touchingGround = false;
     this.computeCenter();
   }
 
@@ -97,6 +98,7 @@ Block = (function () {
         if (ddd < smallestD) {
           smallestD = ddd;
           collisionInfo.atom = b1.atoms[i];
+          collisionInfo.oldatom = b1.oldatoms[i];
         }
       }
       return collisionInfo;

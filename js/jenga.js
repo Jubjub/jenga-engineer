@@ -77,8 +77,10 @@ function simulateBlocks(blocks) {
         atom.y += dy;
 
         /* world lower bound, much cheaper than colliding */
+        block.touchingGround = false;
         if (atom.y > canvas.height - 20) {
           atom.y = canvas.height - 20;
+          block.touchingGround = true;
         }
       }
 
@@ -132,6 +134,15 @@ function simulateBlocks(blocks) {
             e1.y -= cv.y * (1 - t) * 0.5 * lambda;
             e2.x -= cv.x * t * 0.5 * lambda;
             e2.y -= cv.y * t * 0.5 * lambda;
+
+            /* hilarious.
+            hit.b2.oldatoms[hit.edge[0]].x = hit.b2.atoms[hit.edge[0]].x;
+            hit.b2.oldatoms[hit.edge[0]].y = hit.b2.atoms[hit.edge[0]].y;
+            hit.b2.oldatoms[hit.edge[1]].x = hit.b2.atoms[hit.edge[1]].x;
+            hit.b2.oldatoms[hit.edge[1]].y = hit.b2.atoms[hit.edge[1]].y;
+            hit.oldatom.x = hit.atom.x;
+            hit.oldatom.y = hit.atom.y;
+            */
           }
         }
       }
