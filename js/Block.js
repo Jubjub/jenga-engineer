@@ -2,6 +2,7 @@
 Block = (function () {
   function constructor(x, y, width, height) {
     this.sprite = new Sprite(null, x, y);
+    this.center = {};
     var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
     this.sprite.makeGraphic(width, height, color);
     this.acceleration = {x : 0, y : 2};
@@ -102,7 +103,8 @@ Block = (function () {
     },
 
     computeCenter: function() {
-      this.center = {x : 0, y : 0};
+      this.center.x = 0;
+      this.center.y = 0;
       for (var i = 0; i < this.atoms.length; i++) {
         this.center.x += this.atoms[i].x;
         this.center.y += this.atoms[i].y;
