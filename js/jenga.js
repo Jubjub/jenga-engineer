@@ -208,6 +208,8 @@ function PlayState() {
     }
     */
 
+    drawString(this.blocks.length.toString(), 10, 10, "#000");
+    
     this.test.draw();
     this.blockss.draw();
     this.proc.draw();
