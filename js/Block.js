@@ -37,7 +37,7 @@ Block = (function () {
       var radius2 = Math.max(other.width, other.height);
       var mindcs = radius1 * radius1 * radius2 * radius2;
       var cd = {x : this.center.x - other.center.x, y : this.center.y - other.center.y};
-      if ((cd.x * cd.x + cd.y * cd.y) > mindcs) {
+      if ((cd.x * cd.x + cd.y * cd.y) > mindcs / 2) {
         return false;
       }
       var collisionInfo = {};
