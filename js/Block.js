@@ -23,6 +23,7 @@ Block = (function () {
       var dot = vec2Dot(axis, this.atoms[0]);
       var min = dot;
       var max = dot;
+      var l = this.atoms.length;
       for (var i = 1; i < this.atoms.length; i++) {
         dot = vec2Dot(axis, this.atoms[i]);
         min = Math.min(dot, min);
@@ -32,6 +33,13 @@ Block = (function () {
     },
 
     collide: function(other) {
+      var radius1 = Math.max(this.width, this.height);
+      var radius2 = Math.max(other.width, other.height);
+      var mindcs = radius1 * radius1 * radius2 * radius2;
+      var cd = {x : this.center.x - other.center.x, y : this.center.y - other.center.y};
+      if ((cd.x * cd.x + cd.y * cd.y) > mindcs) {
+        return false;
+      }
       var collisionInfo = {};
       var minDistance = 100000000;
       for (var i = 0; i < this.edges.length + other.edges.length; i++) {
@@ -61,9 +69,6 @@ Block = (function () {
         }
       }
       collisionInfo.depth = minDistance;
-      // TODO: maybe cache this?
-      this.computeCenter();
-      other.computeCenter();
       var b1 = this;
       var b2 = other;
       if (collisionInfo.object != b2) {

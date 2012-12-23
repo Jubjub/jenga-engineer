@@ -33,6 +33,9 @@ function intervalDistance(proj1, proj2) {
 
 /* verlet physics */
 function simulateBlocks(blocks) {
+  for (var i = 0; i < blocks.length; i++) {
+    blocks[i].computeCenter();
+  }
   // TODO: get some actual time values.
   var dt = 0.16666666666;
   dt /= verlet_steps;
@@ -78,31 +81,28 @@ function simulateBlocks(blocks) {
         b.y += diff * dy;
         /* collision constraints */
         // TODO: space partitioning. pretty please.
-        for (var k = 0; k < blocks.length; k++) {
-          /* seriously running out of single letter vars here */
-          for (var r = 0; r < blocks.length; r++) {
-            if (blocks[k] == blocks[r]) {
-              continue;
+        for (var r = 0; r < blocks.length; r++) {
+          if (block == blocks[r]) {
+            continue;
+          }
+          var hit = block.collide(blocks[r]);
+          if (hit) {
+            var cv = {x : hit.normal.x * hit.depth, y : hit.normal.y * hit.depth};
+            hit.atom.x += cv.x * -0.5;
+            hit.atom.y += cv.y * 0.5;
+            var e1 = hit.b2.atoms[hit.edge[0]];
+            var e2 = hit.b2.atoms[hit.edge[1]];
+            var t;
+            if (Math.abs(e1.x - e2.x) > Math.abs(e1.y - e2.y)) {
+              t = (hit.atom.x - cv.x - e1.x) / (e2.x - e1.x);
+            } else {
+              t = (hit.atom.y - cv.y - e1.position.y) / (e2.y - e1.y);
             }
-            var hit = blocks[k].collide(blocks[r]);
-            if (hit) {
-              var cv = {x : hit.normal.x * hit.depth, y : hit.normal.y * hit.depth};
-              hit.atom.x += cv.x * -0.5;
-              hit.atom.y += cv.y * 0.5;
-              var e1 = hit.b2.atoms[hit.edge[0]];
-              var e2 = hit.b2.atoms[hit.edge[1]];
-              var t;
-              if (Math.abs(e1.x - e2.x) > Math.abs(e1.y - e2.y)) {
-                t = (hit.atom.x - cv.x - e1.x) / (e2.x - e1.x);
-              } else {
-                t = (hit.atom.y - cv.y - e1.position.y) / (e2.y - e1.y);
-              }
-              var lambda = 1 / (t * t + (1 - t) * (1 - t));
-              e1.x -= cv.x * (1 - t) * 0.5 * lambda;
-              e1.y -= cv.y * (1 - t) * 0.5 * lambda;
-              e2.x -= cv.x * t * 0.5 * lambda;
-              e2.y -= cv.y * t * 0.5 * lambda;
-            }
+            var lambda = 1 / (t * t + (1 - t) * (1 - t));
+            e1.x -= cv.x * (1 - t) * 0.5 * lambda;
+            e1.y -= cv.y * (1 - t) * 0.5 * lambda;
+            e2.x -= cv.x * t * 0.5 * lambda;
+            e2.y -= cv.y * t * 0.5 * lambda;
           }
         }
       }
