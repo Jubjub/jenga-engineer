@@ -224,5 +224,5 @@ function PlayState() {
   }
 }
 
-var state = new MenuState();
-switchState(state);
+var playState = new PlayState();
+switchState(playState);
