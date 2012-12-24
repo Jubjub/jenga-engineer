@@ -41,7 +41,7 @@ function getRandomInt(min, max) {
  */
 function simulateBlocks(blocks, rdt) {
   var steps = (rdt / 0.016666) * verlet_steps;
-  if (steps > 1) {
+  if (steps < 1) {
     steps = 1;
   }
   var dt = rdt / steps;
