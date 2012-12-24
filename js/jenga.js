@@ -206,7 +206,6 @@ function PlayState() {
       switchState(new PlayState());
 
     if (this.hintBlock.nextBlock != this.nextBlock) {
-      console.log("hit birach");
       this.hintBlock.makeGraphic(this.nextBlock.width, this.nextBlock.height);
       this.hintBlock.nextBlock = this.nextBlock;
     }
