@@ -60,7 +60,7 @@ function simulateBlocks(blocks, rdt) {
         /* kinetic friction */
         /* TODO: use movement diff instead of current frame displacement, and
          * apply only to interacting atoms */
-        if (block.touching) {
+        if (block.touching || block.touchingFloor) {
           dx += (dx * -0.01);
           dy += (dy * -0.01);
         }
