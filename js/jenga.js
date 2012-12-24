@@ -204,13 +204,25 @@ function PlayState() {
       switchState(new PlayState());
 
     if (isMouseDown("left")) {
-      if (this.canInsertBlock) {
-        this.addBlock(new Block(mouseX - this.nextBlock.width / 2,
-                                mouseY - this.nextBlock.height / 2,
-                                this.nextBlock.width, this.nextBlock.height));
+      if (this.canInsertBlock ) {
+        var colliding = false;
+        var tmpBlock = new Block(mouseX - this.nextBlock.width / 2,
+                                 mouseY - this.nextBlock.height / 2,
+                                 this.nextBlock.width, this.nextBlock.height);
+        for (var i = 0; i < this.blocks.length; i++) {
+          colliding = colliding || (tmpBlock.collide(this.blocks[i]));
+          if (colliding) {
+            break;
+          }
+        }
+        if (!colliding) {
+          this.addBlock(new Block(mouseX - this.nextBlock.width / 2,
+                                  mouseY - this.nextBlock.height / 2,
+                                  this.nextBlock.width, this.nextBlock.height));
 
-        this.nextBlock = {width: getRandomInt(10, 100), height: getRandomInt(10, 50)};
-        this.canInsertBlock = false;
+          this.nextBlock = {width: getRandomInt(10, 100), height: getRandomInt(10, 50)};
+          this.canInsertBlock = false;
+        }
       }
     } else {
       this.canInsertBlock = true;
