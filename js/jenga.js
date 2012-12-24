@@ -208,7 +208,7 @@ function PlayState() {
       switchState(new PlayState());
 
     if (this.hintBlock.nextBlock != this.nextBlock) {
-      this.hintBlock.makeGraphic(this.nextBlock.width, this.nextBlock.height);
+      this.hintBlock.makeGraphic(this.nextBlock.width, this.nextBlock.height, 'black');
       this.hintBlock.nextBlock = this.nextBlock;
     }
     this.hintBlock.x = mouseX - this.nextBlock.width / 2;
