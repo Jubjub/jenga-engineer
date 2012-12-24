@@ -40,12 +40,14 @@ function getRandomInt(min, max) {
  *       limit max overlapping response per iteration
  */
 function simulateBlocks(blocks, rdt) {
+  var steps = rdt / 0.016666 * verlet_steps;
+  var dt = rdt / steps;
+
   for (var i = 0; i < blocks.length; i++) {
     blocks[i].computeCenter();
   }
 
-  var dt = rdt / verlet_steps;
-  for (var n = 0; n < verlet_steps; n++) {
+  for (var n = 0; n < steps; n++) {
     for (var i = 0; i < blocks.length; i++) {
       var block = blocks[i];
 
@@ -268,5 +270,6 @@ function PlayState() {
 }
 
 var playState = new PlayState();
+/* not needed just now, since variable verlet steps are working */
 desiredFPS = 60;
 switchState(playState);
