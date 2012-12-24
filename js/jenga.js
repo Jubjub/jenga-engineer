@@ -44,6 +44,7 @@ function simulateBlocks(blocks, rdt) {
   if (steps < 1) {
     steps = 1;
   }
+  steps = Math.floor(steps);
   var dt = rdt / steps;
 
   for (var i = 0; i < blocks.length; i++) {
