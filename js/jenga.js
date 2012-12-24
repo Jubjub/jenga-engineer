@@ -60,7 +60,7 @@ function simulateBlocks(blocks, rdt) {
         /* kinetic friction */
         /* TODO: use movement diff instead of current frame displacement, and
          * apply only to interacting atoms */
-        if (block.touching || block.touchingFloor) {
+        if (block.touching || block.touchingGround) {
           dx += (dx * -0.01);
           dy += (dy * -0.01);
         }
@@ -176,6 +176,8 @@ function PlayState() {
     this.proc = new Sprite(null, 300, 300);
     this.proc.makeGraphic(160, 20, "#ccff11");
     this.proc.stampText(0, 0, "hello!", 16, "Calibri", "#333333");
+    this.hintBlock = new Sprite(null, 0, 0);
+    this.hintBlock.alpha = 0.5;
 
     this.canInsertBlock = true;
     this.nextBlock = {width: getRandomInt(10, 100), height: getRandomInt(10, 50)};
@@ -202,6 +204,14 @@ function PlayState() {
 
     if (isDown("r"))
       switchState(new PlayState());
+
+    if (this.hintBlock.nextBlock != this.nextBlock) {
+      console.log("hit birach");
+      this.hintBlock.makeGraphic(this.nextBlock.width, this.nextBlock.height);
+      this.hintBlock.nextBlock = this.nextBlock;
+    }
+    this.hintBlock.x = mouseX - this.nextBlock.width / 2;
+    this.hintBlock.y = mouseY - this.nextBlock.height / 2;
 
     if (isMouseDown("left")) {
       if (this.canInsertBlock ) {
@@ -245,6 +255,9 @@ function PlayState() {
 
     drawString(this.blocks.length.toString(), 10, 10, "#000000");
     
+    if (this.hintBlock) {
+      this.hintBlock.draw();
+    }
     this.test.draw();
     this.blockss.draw();
     this.proc.draw();
