@@ -43,6 +43,7 @@ function simulateBlocks(blocks, rdt) {
   for (var i = 0; i < blocks.length; i++) {
     blocks[i].computeCenter();
   }
+
   var dt = rdt / verlet_steps;
   for (var n = 0; n < verlet_steps; n++) {
     for (var i = 0; i < blocks.length; i++) {
@@ -73,7 +74,7 @@ function simulateBlocks(blocks, rdt) {
         atom.x += dx;
         atom.y += dy;
 
-        /* world lower bound, much cheaper than colliding */
+        /* World lower bound, much cheaper than colliding */
         block.touchingGround = false;
         if (atom.y > canvas.height - 20) {
           atom.y = canvas.height - 20;
@@ -81,7 +82,7 @@ function simulateBlocks(blocks, rdt) {
         }
       }
 
-      /* satisfy them constraints */
+      /* Satisfy the constraints */
       for (var j = 0; j < block.edges.length; j++) {
         /* edge constraints */
         var edge = block.edges[j];
@@ -97,6 +98,7 @@ function simulateBlocks(blocks, rdt) {
         dy /= l;
         dx *= 0.5;
         dy *= 0.5;
+
         a.x -= diff * dx;
         a.y -= diff * dy;
         b.x += diff * dx;
@@ -224,6 +226,7 @@ function PlayState() {
             break;
           }
         }
+
         if (!colliding) {
           this.addBlock(new Block(mouseX - this.nextBlock.width / 2,
                                   mouseY - this.nextBlock.height / 2,
@@ -253,10 +256,11 @@ function PlayState() {
     */
 
     drawString(this.blocks.length.toString(), 10, 10, "#000000");
-    
+
     if (this.hintBlock) {
       this.hintBlock.draw();
     }
+
     this.test.draw();
     this.blockss.draw();
     this.proc.draw();
