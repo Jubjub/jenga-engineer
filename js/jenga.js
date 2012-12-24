@@ -39,14 +39,11 @@ function getRandomInt(min, max) {
 /* TODO: introduce mass to the collision response.
  *       limit max overlapping response per iteration
  */
-function simulateBlocks(blocks) {
+function simulateBlocks(blocks, rdt) {
   for (var i = 0; i < blocks.length; i++) {
     blocks[i].computeCenter();
   }
-
-  // TODO: get some actual time values.
-  var dt = 0.16666666666;
-  dt /= verlet_steps;
+  var dt = rdt / verlet_steps;
   for (var n = 0; n < verlet_steps; n++) {
     for (var i = 0; i < blocks.length; i++) {
       var block = blocks[i];
@@ -192,7 +189,7 @@ function PlayState() {
   }
 
   this.update = function() {
-    simulateBlocks(this.blocks);
+    simulateBlocks(this.blocks, this.dt);
 
     if (isDown("up") || isDown("w"))
       this.test.y -= 15;
@@ -208,7 +205,8 @@ function PlayState() {
 
     if (isMouseDown("left")) {
       if (this.canInsertBlock) {
-        this.addBlock(new Block(mouseX - this.nextBlock.width / 2, mouseY - this.nextBlock.height / 2,
+        this.addBlock(new Block(mouseX - this.nextBlock.width / 2,
+                                mouseY - this.nextBlock.height / 2,
                                 this.nextBlock.width, this.nextBlock.height));
 
         this.nextBlock = {width: getRandomInt(10, 100), height: getRandomInt(10, 50)};

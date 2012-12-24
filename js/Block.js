@@ -5,7 +5,7 @@ Block = (function () {
     this.center = {};
     var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
     this.sprite.makeGraphic(width, height, color);
-    this.acceleration = {x : 0, y : 2};
+    this.acceleration = {x : 0, y : 400};
     this.atoms = [{x : x, y : y}, {x : x + width, y : y},
                   {x : x + width, y : y + height}, {x : x, y : y + height}];
     this.oldatoms = [{x : x, y : y }, {x : x + width, y : y},
