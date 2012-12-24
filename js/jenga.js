@@ -1,5 +1,5 @@
 /* Constants */
-var verlet_steps = 5;
+var verlet_steps = 3;
 var damping = 0.9994;
 var radToDeg = 180 / Math.PI;
 var degToRad = Math.PI / 180;
@@ -40,7 +40,10 @@ function getRandomInt(min, max) {
  *       limit max overlapping response per iteration
  */
 function simulateBlocks(blocks, rdt) {
-  var steps = rdt / 0.016666 * verlet_steps;
+  var steps = (rdt / 0.016666) * verlet_steps;
+  if (steps > 1) {
+    steps = 1;
+  }
   var dt = rdt / steps;
 
   for (var i = 0; i < blocks.length; i++) {
@@ -271,5 +274,5 @@ function PlayState() {
 
 var playState = new PlayState();
 /* not needed just now, since variable verlet steps are working */
-desiredFPS = 60;
+//desiredFPS = 60;
 switchState(playState);
