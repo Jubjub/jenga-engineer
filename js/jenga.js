@@ -275,5 +275,5 @@ function PlayState() {
 
 var playState = new PlayState();
 /* not needed just now, since variable verlet steps are working */
-//desiredFPS = 60;
+desiredFPS = 60;
 switchState(playState);
