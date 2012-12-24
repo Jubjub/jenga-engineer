@@ -12,6 +12,7 @@ Block = (function () {
                   {x : x + width, y : y + height}, {x : x, y : y + height}];
     var h = Math.sqrt(width * width + height * height);
     this.edges = [[0, 1, width], [1, 2, height], [2, 3, width], [3, 0, height], [0, 2, h]];
+    this.collisionEdgeCount = 4;
     this.touching = false;
     this.touchingGround = false;
     this.computeCenter();
@@ -46,7 +47,7 @@ Block = (function () {
       }
       var collisionInfo = {};
       var minDistance = 100000000;
-      for (var i = 0; i < this.edges.length + other.edges.length; i++) {
+      for (var i = 0; i < this.collisionEdgeCount + other.edges.length; i++) {
         var edge;
         var obj;
         if (i < this.edges.length) {

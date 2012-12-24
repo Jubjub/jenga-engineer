@@ -67,8 +67,8 @@ function simulateBlocks(blocks, rdt) {
         /* TODO: use movement diff instead of current frame displacement, and
          * apply only to interacting atoms */
         if (block.touching || block.touchingGround) {
-          dx += (dx * -0.01);
-          dy += (dy * -0.01);
+          dx += (dx * -5.1 * dt);
+          dy += (dy * -5.1 * dt);
         }
 
         dx *= damping;
