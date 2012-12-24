@@ -231,6 +231,8 @@ function PlayState() {
             break;
           }
         }
+        console.log(mouseY + this.nextBlock.height / 2);
+        colliding = colliding || (mouseY + this.nextBlock.height / 2 > canvas.height - 20);
 
         if (!colliding) {
           this.addBlock(new Block(mouseX - this.nextBlock.width / 2,
