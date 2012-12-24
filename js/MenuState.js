@@ -14,7 +14,7 @@ function MenuState() {
   }
 
   this.update = function() {
-    if (isDown("space")) {
+    if (isDown("space") || isMouseDown("left")) {
       var state = new PlayState();
       switchState(state);
     }
