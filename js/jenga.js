@@ -80,7 +80,7 @@ function simulateBlocks(blocks, rdt) {
           }
           if (block.touching || block.touchingGround) {
             // TODO: experiment with this magic number.
-            if (dx < 0.01) {
+            if (dx < 0.001) {
               dx = 0;
             }
           }
@@ -182,6 +182,9 @@ function simulateBlocks(blocks, rdt) {
   }
 }
 
+/* keep socket external for reconnection */
+var socket;
+
 /* Main game state */
 function PlayState() {
   this.setup = function() {
@@ -210,6 +213,28 @@ function PlayState() {
     this.nextBlock = {width: getRandomInt(10, 100), height: getRandomInt(10, 50)};
 
     preventKeys("down", "right", "left", "right", "space", "r");
+
+    /* network */
+    socket = io.connect("http://localhost");
+    socket.data = {};
+    socket.data.game = this;
+    socket.on("connect", function() {
+      socket.emit("hello", { source: "development" });
+      var room = "test_room";
+      socket.emit("tryjoin", { room : room});
+      socket.data.room = room;
+    });
+    socket.on("sup", function(msg) {
+      console.log("received id from server: " + msg.id);
+      socket.data.id = msg.id;
+    });
+    socket.on("blockcreated", function(msg) {
+      console.log("received block from server");
+      if (msg.creator == socket.data.id) {
+        return;
+      }
+      socket.data.game.addBlock(new Block(msg.x, msg.y, msg.width, msg.height));
+    });
   }
 
   this.addBlock = function(block) {
@@ -242,8 +267,9 @@ function PlayState() {
     if (isMouseDown("left")) {
       if (this.canInsertBlock ) {
         var colliding = false;
-        var tmpBlock = new Block(mouseX - this.nextBlock.width / 2,
-                                 mouseY - this.nextBlock.height / 2,
+        var blockPos = {x :mouseX - this.nextBlock.width / 2,
+                        y : mouseY - this.nextBlock.height / 2};
+        var tmpBlock = new Block(blockPos.x, blockPos.y,
                                  this.nextBlock.width, this.nextBlock.height);
         for (var i = 0; i < this.blocks.length; i++) {
           colliding = colliding || (tmpBlock.collide(this.blocks[i]));
@@ -253,9 +279,11 @@ function PlayState() {
         }
         colliding = colliding || (mouseY + this.nextBlock.height / 2 > canvas.height - 20);
         if (!colliding) {
-          this.addBlock(new Block(mouseX - this.nextBlock.width / 2,
-                                  mouseY - this.nextBlock.height / 2,
+          this.addBlock(new Block(blockPos.x, blockPos.y,
                                   this.nextBlock.width, this.nextBlock.height));
+          socket.emit("newblock", {x : blockPos.x, y : blockPos.y,
+                                   width : this.nextBlock.width,
+                                   height : this.nextBlock.height});
 
           this.nextBlock = {width: getRandomInt(10, 100), height: getRandomInt(10, 50)};
           this.canInsertBlock = false;
