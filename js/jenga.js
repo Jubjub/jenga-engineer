@@ -229,8 +229,6 @@ function PlayState() {
         return;
       }
 
-      console.log("HAII - " + msg.color);
-
       socket.data.game.addBlock(new Block(msg.x, msg.y, msg.width, msg.height, msg.color));
     });
   }
