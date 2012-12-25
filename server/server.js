@@ -10,7 +10,7 @@ io.sockets.on("connection", function(socket) {
 
   socket.on("hello", function(msg) {
     console.log("reported link from '" + msg.source + "' version");
-    socket.emit("sup", {id : socket.id});
+    socket.emit("sup", {id: socket.id});
   });
 
   socket.on("tryjoin", function(msg) {
