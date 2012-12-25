@@ -22,6 +22,7 @@ io.sockets.on("connection", function(socket) {
   socket.on("newblock", function(msg) {
     console.log("new block request received");
     console.log("granted");
+
     var room = io.sockets.manager.roomClients[socket.id][0];
     msg.creator = socket.id;
     io.sockets.in(room).emit("blockcreated", msg);

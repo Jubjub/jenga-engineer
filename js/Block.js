@@ -1,10 +1,9 @@
 /* Basic construction piece */
 Block = (function () {
-  function constructor(x, y, width, height) {
+  function constructor(x, y, width, height, color) {
     this.sprite = new Sprite(null, x, y);
     this.center = {};
 
-    var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
     this.sprite.makeGraphic(width, height, color);
     this.acceleration = {x: 0, y: 400};
 

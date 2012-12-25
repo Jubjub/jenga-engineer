@@ -6,11 +6,12 @@ function MenuState() {
     this.label = new Sprite(null, 50, 0);
     this.label.makeLabel("Jenga Engineer", 70, "Verdana", "black");
     this.global.push(this.label);
+
     preventKeys("down", "right", "left", "right", "space");
 
     /* Establish a link to the server */
     socket = io.connect("http://localhost");
-    socket.emit("hello", { source: "development" });
+    socket.emit("hello", {source: "development"});
   }
 
   this.update = function() {

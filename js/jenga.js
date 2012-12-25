@@ -229,7 +229,9 @@ function PlayState() {
         return;
       }
 
-      socket.data.game.addBlock(new Block(msg.x, msg.y, msg.width, msg.height));
+      console.log("HAII - " + msg.color);
+
+      socket.data.game.addBlock(new Block(msg.x, msg.y, msg.width, msg.height, msg.color));
     });
   }
 
@@ -280,12 +282,15 @@ function PlayState() {
         colliding = colliding || (mouseY + this.nextBlock.height / 2 > canvas.height - 20);
 
         if (!colliding) {
+          var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
           this.addBlock(new Block(blockPos.x, blockPos.y,
-                                  this.nextBlock.width, this.nextBlock.height));
+                                  this.nextBlock.width, this.nextBlock.height,
+                                  color));
           socket.emit("newblock", {x: blockPos.x,
                                    y: blockPos.y,
                                    width: this.nextBlock.width,
-                                   height: this.nextBlock.height});
+                                   height: this.nextBlock.height,
+                                   color: color});
 
           this.nextBlock = {width: getRandomInt(10, 100), height: getRandomInt(10, 50)};
           this.canInsertBlock = false;
