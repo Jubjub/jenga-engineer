@@ -71,13 +71,16 @@ function simulateBlocks(blocks, rdt) {
             var siy = dy > 0 ? 1 : dy == 0 ? 0 : -1;
             dx += (dx * -5.1 * dt);
             dy += (dy * -5.1 * dt);
+
             if ((dx > 0 ? 1 : dx == 0 ? 0 : -1) != six) {
               dx = 0;
             }
+
             if ((dy > 0 ? 1 : dy == 0 ? 0 : -1) != siy) {
               dy = 0;
             }
           }
+
           if (block.touching || block.touchingGround) {
             // TODO: experiment with this magic number.
             if (dx < 0.001) {
@@ -103,7 +106,7 @@ function simulateBlocks(blocks, rdt) {
 
         /* Satisfy the constraints */
         for (var j = 0; j < block.edges.length; j++) {
-          /* edge constraints */
+          /* Edge constraints */
           var edge = block.edges[j];
           var a = block.atoms[edge[0]];
           var b = block.atoms[edge[1]];
@@ -165,7 +168,7 @@ function simulateBlocks(blocks, rdt) {
           }
         }
 
-        /* extract position and rotation from physical points */
+        /* Extract position and rotation from physical points */
         // TODO: what. how. huh. why does this work. it shouldn't do that. why
         // does it do that. stop doing that. fuck you javascript, fuck you
         // canvas, stop messing with my coordinate systems. why must you ruin
@@ -178,6 +181,7 @@ function simulateBlocks(blocks, rdt) {
         block.sprite.angle = vec2Angle({x : 1, y : 0}, dir);
       }
     }
+
     accumulated -= timestep;
   }
 }
@@ -192,20 +196,7 @@ function PlayState() {
     this.blockss = new SpriteList();
 
     /* Add some test blocks */
-    //block = new Block(20, 20, 40, 20);
-    //this.addBlock(block);
-    //this.addBlock(new Block(40, 80, 80, 10));
-    //this.addBlock(new Block(140, 80, 80, 10));
     this.addBlock(new Block(context.width / 2 - 300 / 2, 80, 300, 20));
-    /*
-    this.test = new Sprite("assets/img/debug.png", 100, context.height / 2 - 100);
-    this.test.stampRect(14, 0, 4, 16, "#0000ff");
-    */
-    /*
-    this.proc = new Sprite(null, 300, 300);
-    this.proc.makeGraphic(160, 20, "#ccff11");
-    this.proc.stampText(0, 0, "hello!", 16, "Calibri", "#333333");
-    */
     this.hintBlock = new Sprite(null, 0, 0);
     this.hintBlock.alpha = 0.5;
 
@@ -214,25 +205,30 @@ function PlayState() {
 
     preventKeys("down", "right", "left", "right", "space", "r");
 
-    /* network */
+    /* Network */
     socket = io.connect("http://localhost");
     socket.data = {};
     socket.data.game = this;
+
     socket.on("connect", function() {
-      socket.emit("hello", { source: "development" });
+      socket.emit("hello", {source: "development" });
       var room = "test_room";
-      socket.emit("tryjoin", { room : room});
+      socket.emit("tryjoin", {room: room});
       socket.data.room = room;
     });
+
     socket.on("sup", function(msg) {
       console.log("received id from server: " + msg.id);
       socket.data.id = msg.id;
     });
+
     socket.on("blockcreated", function(msg) {
       console.log("received block from server");
+
       if (msg.creator == socket.data.id) {
         return;
       }
+
       socket.data.game.addBlock(new Block(msg.x, msg.y, msg.width, msg.height));
     });
   }
@@ -261,6 +257,7 @@ function PlayState() {
       this.hintBlock.makeGraphic(this.nextBlock.width, this.nextBlock.height, 'black');
       this.hintBlock.nextBlock = this.nextBlock;
     }
+
     this.hintBlock.x = mouseX - this.nextBlock.width / 2;
     this.hintBlock.y = mouseY - this.nextBlock.height / 2;
 
@@ -271,19 +268,24 @@ function PlayState() {
                         y : mouseY - this.nextBlock.height / 2};
         var tmpBlock = new Block(blockPos.x, blockPos.y,
                                  this.nextBlock.width, this.nextBlock.height);
+
         for (var i = 0; i < this.blocks.length; i++) {
           colliding = colliding || (tmpBlock.collide(this.blocks[i]));
+
           if (colliding) {
             break;
           }
         }
+
         colliding = colliding || (mouseY + this.nextBlock.height / 2 > canvas.height - 20);
+
         if (!colliding) {
           this.addBlock(new Block(blockPos.x, blockPos.y,
                                   this.nextBlock.width, this.nextBlock.height));
-          socket.emit("newblock", {x : blockPos.x, y : blockPos.y,
-                                   width : this.nextBlock.width,
-                                   height : this.nextBlock.height});
+          socket.emit("newblock", {x: blockPos.x,
+                                   y: blockPos.y,
+                                   width: this.nextBlock.width,
+                                   height: this.nextBlock.height});
 
           this.nextBlock = {width: getRandomInt(10, 100), height: getRandomInt(10, 50)};
           this.canInsertBlock = false;
@@ -319,6 +321,5 @@ function PlayState() {
 }
 
 var playState = new PlayState();
-/* not needed just now, since variable verlet steps are working */
 desiredFPS = 60;
 switchState(playState);
