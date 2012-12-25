@@ -53,15 +53,6 @@ function PlayState() {
   this.update = function() {
     simulateBlocks(this.blocks, this.dt);
 
-    if (isDown("up") || isDown("w"))
-      this.test.y -= 15;
-    if (isDown("down") || isDown("s"))
-      this.test.y += 10;
-    if (isDown("right") || isDown("d"))
-      this.test.x += 10;
-    if (isDown("left") || isDown("a"))
-      this.test.x -= 10;
-
     if (isDown("r"))
       switchState(new PlayState());
 
