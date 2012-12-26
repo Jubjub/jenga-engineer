@@ -3,6 +3,7 @@ Block = (function () {
   function constructor(x, y, width, height, color) {
     this.sprite = new Sprite(null, x, y);
     this.center = {};
+    this.sleeping = false;
 
     this.sprite.makeGraphic(width, height, color);
     this.acceleration = {x: 0, y: 400};
@@ -31,7 +32,7 @@ Block = (function () {
       var max = dot;
       var l = this.atoms.length;
 
-      for (var i = 1; i < this.atoms.length; i++) {
+      for (var i = 1; i < l; i++) {
         dot = vec2Dot(axis, this.atoms[i]);
         min = Math.min(dot, min);
         max = Math.max(dot, max);
