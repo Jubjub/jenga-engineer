@@ -104,6 +104,15 @@ function TestState() {
   this.draw = function() {
     clearCanvas();
 
+    /* draw sleeping state */
+    for (var i = 0; i < this.blocks.length; i++) {
+      var block = this.blocks[i];
+      if (block.sleeping) {
+        context.fillStyle = "#55ff55";
+        context.fillRect(block.atoms[0].x, block.atoms[0].y, 10, 10);
+      }
+    }
+    
     for (var i = 0; i < this.blocks.length; i++) {
       var block = this.blocks[i];
       for (var j = 0; j < block.atoms.length; j++) {
