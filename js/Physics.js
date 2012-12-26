@@ -98,7 +98,7 @@ function simulateBlocks(blocks, rdt) {
             var six = dx > 0 ? 1 : dx == 0 ? 0 : -1;
             var siy = dy > 0 ? 1 : dy == 0 ? 0 : -1;
             dx += (dx * -5.1 * dt);
-            dy += (dy * -5.1 * dt);
+            dy += (dy * -3.1 * dt);
 
             if ((dx > 0 ? 1 : dx == 0 ? 0 : -1) != six) {
               dx = 0;
@@ -121,7 +121,7 @@ function simulateBlocks(blocks, rdt) {
 
           /* put slow objects to sleep */
           block.sleepHits++;
-          if (Math.abs(dx) + Math.abs(dy) > 0.3) {
+          if (Math.abs(dx) + Math.abs(dy) > 0.2) {
             block.sleepHits = 0;
           }
 
