@@ -7,6 +7,14 @@ function PlayState() {
     this.blocks = [];
     this.blockss = new SpriteList();
 
+    this.space = new cp.Space();
+    this.space.iterations = 10;
+    this.space.gravity = new cp.Vect(0, 150);
+    this.ground = this.space.addShape(new cp.SegmentShape(this.space.staticBody,
+                                      new cp.Vect(0, 460), new cp.Vect(640, 460), 1));
+    this.ground.setElasticity(0);
+    this.ground.setFriction(1);
+
     this.hintBlock = new Sprite(null, 0, 0);
     this.hintBlock.alpha = 0.5;
 
@@ -46,13 +54,26 @@ function PlayState() {
   }
 
   this.addBlock = function(block) {
+    block.body = this.space.addBody(new cp.Body(1, cp.momentForBox(1, block.width,
+                                                                        block.height)));
+    block.body.setPos(new cp.Vect(block.sprite.x + block.width / 2,
+                                  block.sprite.y + block.height / 2));
+    block.shape = this.space.addShape(new cp.BoxShape(block.body, block.width, block.height));
+    block.shape.setElasticity(0);
+    block.shape.setFriction(1);
     this.blocks.push(block);
     this.blockss.push(block.sprite);
   }
 
   this.update = function() {
-    /* Apply physics */
-    simulateBlocks(this.blocks, this.dt);
+    this.space.step(this.dt);
+
+    for (var i = 0; i < this.blocks.length; i++) {
+      var block = this.blocks[i];
+      block.sprite.x = block.body.p.x - block.width / 2;
+      block.sprite.y = block.body.p.y - block.height / 2;
+      block.sprite.angle = block.body.a * radToDeg;
+    }
 
     /* Handle hint block */
     if (this.hintBlock.nextBlock != this.nextBlock) {
@@ -72,6 +93,7 @@ function PlayState() {
         var tmpBlock = new Block(blockPos.x, blockPos.y,
                                  this.nextBlock.width, this.nextBlock.height);
 
+        /*
         for (var i = 0; i < this.blocks.length; i++) {
           colliding = colliding || (tmpBlock.collide(this.blocks[i]));
 
@@ -79,6 +101,7 @@ function PlayState() {
             break;
           }
         }
+        */
 
         colliding = colliding || (mouseY + this.nextBlock.height / 2 > canvas.height - 20);
 
