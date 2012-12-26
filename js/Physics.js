@@ -4,6 +4,14 @@
  */
 var accumulated = 0;
 var timestep = 0.016666666;
+var shash = [];
+
+function computeSpatialHash(blocks) {
+
+
+
+}
+
 function simulateBlocks(blocks, rdt) {
   accumulated += rdt;
   while (accumulated > timestep) {
@@ -14,6 +22,7 @@ function simulateBlocks(blocks, rdt) {
     }
 
     for (var n = 0; n < verlet_steps; n++) {
+      //blocks.reverse();
       for (var i = 0; i < blocks.length; i++) {
         var block = blocks[i];
 
@@ -88,46 +97,46 @@ function simulateBlocks(blocks, rdt) {
           a.y -= diff * dy;
           b.x += diff * dx;
           b.y += diff * dy;
+        }
 
-          /* Collision constraints */
-          block.computeCenter();
-          // TODO: space partitioning. pretty please.
-          for (var r = 0; r < blocks.length; r++) {
-            if (block == blocks[r]) {
-              continue;
+        /* Collision constraints */
+        block.computeCenter();
+        // TODO: space partitioning. pretty please.
+        for (var r = 0; r < blocks.length; r++) {
+          if (block == blocks[r]) {
+            continue;
+          }
+
+          blocks[r].computeCenter();
+          var hit = block.collide(blocks[r]);
+          if (hit) {
+            var cv = {x : hit.normal.x * hit.depth, y : hit.normal.y * hit.depth};
+            hit.atom.x += cv.x * 0.5;
+            hit.atom.y += cv.y * 0.5;
+            var e1 = hit.b2.atoms[hit.edge[0]];
+            var e2 = hit.b2.atoms[hit.edge[1]];
+            var t;
+
+            if (Math.abs(e1.x - e2.x) > Math.abs(e1.y - e2.y)) {
+              t = (hit.atom.x - cv.x - e1.x) / (e2.x - e1.x);
+            } else {
+              t = (hit.atom.y - cv.y - e1.y) / (e2.y - e1.y);
             }
 
-            blocks[r].computeCenter();
-            var hit = block.collide(blocks[r]);
-            if (hit) {
-              var cv = {x : hit.normal.x * hit.depth, y : hit.normal.y * hit.depth};
-              hit.atom.x += cv.x * 0.5;
-              hit.atom.y += cv.y * 0.5;
-              var e1 = hit.b2.atoms[hit.edge[0]];
-              var e2 = hit.b2.atoms[hit.edge[1]];
-              var t;
+            var lambda = 1 / (t * t + (1 - t) * (1 - t));
+            e1.x -= cv.x * (1 - t) * 0.5 * lambda;
+            e1.y -= cv.y * (1 - t) * 0.5 * lambda;
+            e2.x -= cv.x * t * 0.5 * lambda;
+            e2.y -= cv.y * t * 0.5 * lambda;
 
-              if (Math.abs(e1.x - e2.x) > Math.abs(e1.y - e2.y)) {
-                t = (hit.atom.x - cv.x - e1.x) / (e2.x - e1.x);
-              } else {
-                t = (hit.atom.y - cv.y - e1.y) / (e2.y - e1.y);
-              }
-
-              var lambda = 1 / (t * t + (1 - t) * (1 - t));
-              e1.x -= cv.x * (1 - t) * 0.5 * lambda;
-              e1.y -= cv.y * (1 - t) * 0.5 * lambda;
-              e2.x -= cv.x * t * 0.5 * lambda;
-              e2.y -= cv.y * t * 0.5 * lambda;
-
-              /* hilarious.
-              hit.b2.oldatoms[hit.edge[0]].x = hit.b2.atoms[hit.edge[0]].x;
-              hit.b2.oldatoms[hit.edge[0]].y = hit.b2.atoms[hit.edge[0]].y;
-              hit.b2.oldatoms[hit.edge[1]].x = hit.b2.atoms[hit.edge[1]].x;
-              hit.b2.oldatoms[hit.edge[1]].y = hit.b2.atoms[hit.edge[1]].y;
-              hit.oldatom.x = hit.atom.x;
-              hit.oldatom.y = hit.atom.y;
-              */
-            }
+            /* hilarious.
+            hit.b2.oldatoms[hit.edge[0]].x = hit.b2.atoms[hit.edge[0]].x;
+            hit.b2.oldatoms[hit.edge[0]].y = hit.b2.atoms[hit.edge[0]].y;
+            hit.b2.oldatoms[hit.edge[1]].x = hit.b2.atoms[hit.edge[1]].x;
+            hit.b2.oldatoms[hit.edge[1]].y = hit.b2.atoms[hit.edge[1]].y;
+            hit.oldatom.x = hit.atom.x;
+            hit.oldatom.y = hit.atom.y;
+            */
           }
         }
 
