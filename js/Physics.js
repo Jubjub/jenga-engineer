@@ -15,16 +15,19 @@ shash.buckets = [];
 shash.insert = function(x, y, block) {
   /* width * row + col */
   var i = Math.floor(this.cwidth * Math.floor(y / this.cellsize) +
-          Math.floor(x / this.cellsize));
+                     Math.floor(x / this.cellsize));
+
   if (!this.buckets[i]) {
     this.buckets[i] = [];
   }
+
   this.buckets[i].push(block);
 }
 
 shash.fetch = function(x, y) {
   var i = Math.floor(this.cwidth * Math.floor(y / this.cellsize) +
-          Math.floor(x / this.cellsize));
+                     Math.floor(x / this.cellsize));
+
   return this.buckets[i];
 }
 
@@ -35,7 +38,7 @@ shash.retrieve = function(bbox) {
   result.push.apply(result, this.fetch(bbox.max.x, bbox.min.y));
 
   result = result.filter(function(elem, pos) {
-      return result.indexOf(elem) == pos;
+    return result.indexOf(elem) == pos;
   })
 
   return result;
@@ -46,14 +49,17 @@ function computeSpatialHash(blocks) {
   for (var i = 0; i < blocks.length; i++) {
     var block = blocks[i];
     var bbox = {};
+
     bbox.min = {x: block.atoms[0].x, y: block.atoms[0].y};
     bbox.max = {x: block.atoms[0].x, y: block.atoms[0].y};
+
     for (var n = 1; n < block.atoms.length; n++) {
       bbox.min.x = Math.min(bbox.min.x, block.atoms[n].x);
       bbox.min.y = Math.min(bbox.min.y, block.atoms[n].y);
       bbox.max.x = Math.max(bbox.max.x, block.atoms[n].x);
       bbox.max.y = Math.max(bbox.max.y, block.atoms[n].y);
     }
+
     block.bbox = bbox;
     shash.insert(bbox.min.x, bbox.min.y, block);
     shash.insert(bbox.min.x, bbox.max.y, block);
@@ -75,6 +81,7 @@ function simulateBlocks(blocks, rdt) {
       //blocks.reverse();
       for (var i = 0; i < blocks.length; i++) {
         var block = blocks[i];
+
         if (block.sleeping) {
           continue;
         }
@@ -114,8 +121,8 @@ function simulateBlocks(blocks, rdt) {
           }
 
           /*
-          dx *= damping;
-          dy *= damping;
+            dx *= damping;
+            dy *= damping;
           */
 
           /* put slow objects to sleep */
@@ -123,6 +130,7 @@ function simulateBlocks(blocks, rdt) {
           if (Math.abs(dx) + Math.abs(dy) > 0.3) {
             block.sleepHits = 0;
           }
+
           if (block.sleepHits > 500) {
             block.sleeping = true;
             sleepHits = 0;
@@ -192,8 +200,8 @@ function simulateBlocks(blocks, rdt) {
             hit.atom.y += cv.y * 0.5 * b1slf;
 
             /*
-            hit.b1.sleeping = false;
-            hit.b2.sleeping = false;
+              hit.b1.sleeping = false;
+              hit.b2.sleeping = false;
             */
             if (hit.b1.lastTouching != hit.b2) {
               hit.b1.sleeping = false;
@@ -222,12 +230,12 @@ function simulateBlocks(blocks, rdt) {
             e2.y -= cv.y * t * 0.5 * lambda * b2slf;
 
             /* hilarious.
-            hit.b2.oldatoms[hit.edge[0]].x = hit.b2.atoms[hit.edge[0]].x;
-            hit.b2.oldatoms[hit.edge[0]].y = hit.b2.atoms[hit.edge[0]].y;
-            hit.b2.oldatoms[hit.edge[1]].x = hit.b2.atoms[hit.edge[1]].x;
-            hit.b2.oldatoms[hit.edge[1]].y = hit.b2.atoms[hit.edge[1]].y;
-            hit.oldatom.x = hit.atom.x;
-            hit.oldatom.y = hit.atom.y;
+               hit.b2.oldatoms[hit.edge[0]].x = hit.b2.atoms[hit.edge[0]].x;
+               hit.b2.oldatoms[hit.edge[0]].y = hit.b2.atoms[hit.edge[0]].y;
+               hit.b2.oldatoms[hit.edge[1]].x = hit.b2.atoms[hit.edge[1]].x;
+               hit.b2.oldatoms[hit.edge[1]].y = hit.b2.atoms[hit.edge[1]].y;
+               hit.oldatom.x = hit.atom.x;
+               hit.oldatom.y = hit.atom.y;
             */
           }
         }

@@ -13,6 +13,8 @@ function PlayState() {
     this.canInsertBlock = true;
     this.nextBlock = {width: getRandomInt(10, 100), height: getRandomInt(10, 50)};
 
+    this.color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+    
     preventKeys("down", "right", "left", "right", "space", "r");
 
     /* Network */
@@ -49,11 +51,10 @@ function PlayState() {
   }
 
   this.update = function() {
+    /* Apply physics */
     simulateBlocks(this.blocks, this.dt);
 
-    if (isDown("r"))
-      switchState(new PlayState());
-
+    /* Handle hint block */
     if (this.hintBlock.nextBlock != this.nextBlock) {
       this.hintBlock.makeGraphic(this.nextBlock.width, this.nextBlock.height, 'black');
       this.hintBlock.nextBlock = this.nextBlock;
@@ -62,11 +63,12 @@ function PlayState() {
     this.hintBlock.x = mouseX - this.nextBlock.width / 2;
     this.hintBlock.y = mouseY - this.nextBlock.height / 2;
 
+    /* Add new blocks */
     if (isMouseDown("left")) {
       if (this.canInsertBlock ) {
         var colliding = false;
-        var blockPos = {x :mouseX - this.nextBlock.width / 2,
-                        y : mouseY - this.nextBlock.height / 2};
+        var blockPos = {x: mouseX - this.nextBlock.width / 2,
+                        y: mouseY - this.nextBlock.height / 2};
         var tmpBlock = new Block(blockPos.x, blockPos.y,
                                  this.nextBlock.width, this.nextBlock.height);
 
@@ -81,15 +83,14 @@ function PlayState() {
         colliding = colliding || (mouseY + this.nextBlock.height / 2 > canvas.height - 20);
 
         if (!colliding) {
-          var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
           this.addBlock(new Block(blockPos.x, blockPos.y,
                                   this.nextBlock.width, this.nextBlock.height,
-                                  color));
+                                  this.color));
           socket.emit("newblock", {x: blockPos.x,
                                    y: blockPos.y,
                                    width: this.nextBlock.width,
                                    height: this.nextBlock.height,
-                                   color: color});
+                                   color: this.color});
 
           this.nextBlock = {width: getRandomInt(10, 100), height: getRandomInt(10, 50)};
           this.canInsertBlock = false;
