@@ -4,12 +4,34 @@
  */
 var accumulated = 0;
 var timestep = 0.016666666;
-var shash = [];
+var shash = {};
+shash.width = 640;
+shash.height = 2000;
+shash.cellsize = 100 * 2;
+shash.buckets = [];
+
+shash.insert = function(x, y, block) {
+}
 
 function computeSpatialHash(blocks) {
-
-
-
+  shash.buckets = [];
+  for (var i = 0; i < blocks.length; i++) {
+    var block = blocks[i];
+    var bbox = {};
+    bbox.min = {x: block.atoms[0].x, y: block.atoms[0].y};
+    bbox.max = {x: block.atoms[0].x, y: block.atoms[0].y};
+    for (var n = 1; n < block.atoms.length; n++) {
+      bbox.min.x = Math.min(bbox.min.x, block.atoms[n].x);
+      bbox.min.y = Math.min(bbox.min.y, block.atoms[n].y);
+      bbox.max.x = Math.max(bbox.max.x, block.atoms[n].x);
+      bbox.max.y = Math.max(bbox.max.y, block.atoms[n].y);
+    }
+    block.bbox = bbox;
+    shash.insert(bbox.min.x, bbox.min.y, block);
+    shash.insert(bbox.min.x, bbox.max.y, block);
+    shash.insert(bbox.max.x, bbox.max.y, block);
+    shash.insert(bbox.max.x, bbox.min.y, block);
+  }
 }
 
 function simulateBlocks(blocks, rdt) {
@@ -100,6 +122,7 @@ function simulateBlocks(blocks, rdt) {
         }
 
         /* Collision constraints */
+        computeSpatialHash(blocks);
         block.computeCenter();
         // TODO: space partitioning. pretty please.
         for (var r = 0; r < blocks.length; r++) {
