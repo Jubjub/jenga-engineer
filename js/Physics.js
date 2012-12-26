@@ -8,9 +8,35 @@ var shash = {};
 shash.width = 640;
 shash.height = 2000;
 shash.cellsize = 100 * 2;
+shash.cwidth = Math.ceil(shash.width / shash.cellsize);
+shash.cheight = Math.ceil(shash.height / shash.cellsize);
 shash.buckets = [];
 
 shash.insert = function(x, y, block) {
+  /* width * row + col */
+  var i = Math.floor(this.cwidth * Math.floor(y / this.cellsize) + Math.floor(x / this.cellsize));
+  if (!this.buckets[i]) {
+    this.buckets[i] = [];
+  }
+  this.buckets[i].push(block);
+}
+
+shash.fetch = function(x, y) {
+  var i = Math.floor(this.cwidth * Math.floor(y / this.cellsize) + Math.floor(x / this.cellsize));
+  return this.buckets[i];
+}
+
+shash.retrieve = function(bbox) {
+  var result = this.fetch(bbox.min.x, bbox.min.y)
+  result = result.concat(this.fetch(bbox.min.x, bbox.max.y));
+  result = result.concat(this.fetch(bbox.max.x, bbox.max.y));
+  result = result.concat(this.fetch(bbox.max.x, bbox.min.y));
+
+  result = result.filter(function(elem, pos) {
+      return result.indexOf(elem) == pos;
+  })
+
+  return result;
 }
 
 function computeSpatialHash(blocks) {
@@ -125,13 +151,14 @@ function simulateBlocks(blocks, rdt) {
         computeSpatialHash(blocks);
         block.computeCenter();
         // TODO: space partitioning. pretty please.
-        for (var r = 0; r < blocks.length; r++) {
-          if (block == blocks[r]) {
+        var hashBlocks = shash.retrieve(block.bbox);
+        for (var r = 0; r < hashBlocks.length; r++) {
+          if (block == hashBlocks[r]) {
             continue;
           }
 
-          blocks[r].computeCenter();
-          var hit = block.collide(blocks[r]);
+          hashBlocks[r].computeCenter();
+          var hit = block.collide(hashBlocks[r]);
           if (hit) {
             var cv = {x : hit.normal.x * hit.depth, y : hit.normal.y * hit.depth};
             hit.atom.x += cv.x * 0.5;
