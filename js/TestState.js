@@ -113,6 +113,24 @@ function TestState() {
       }
     }
 
+    for (var i = 0; i < this.blocks.length; i++) {
+      var block = this.blocks[i];
+      var bbox = block.bbox;
+
+      if (!bbox) {
+        continue;
+      }
+
+      context.strokeStyle = "#ff0000";
+      context.beginPath();
+      context.moveTo(bbox.min.x, bbox.min.y);
+      context.lineTo(bbox.min.x, bbox.max.y);
+      context.lineTo(bbox.max.x, bbox.max.y);
+      context.lineTo(bbox.max.x, bbox.min.y);
+      context.lineTo(bbox.min.x, bbox.min.y);
+      context.stroke();
+    }
+
     drawString(this.blocks.length.toString(), 10, 10, "#000000");
 
     if (this.hintBlock) {

@@ -103,37 +103,6 @@ function PlayState() {
   this.draw = function() {
     clearCanvas();
 
-    /* draw atoms */
-    /*
-    for (var i = 0; i < this.blocks.length; i++) {
-      var block = this.blocks[i];
-      for (var j = 0; j < block.atoms.length; j++) {
-        var atom = block.atoms[j];
-        context.fillStyle = "#00ff00";
-        context.fillRect(atom.x - 2.5, atom.y - 2.5, 5, 5);
-      }
-    }
-    */
-
-    /* draw bounding boxes */
-    /*
-    for (var i = 0; i < this.blocks.length; i++) {
-      var block = this.blocks[i];
-      var bbox = block.bbox;
-      if (!bbox) {
-        continue;
-      }
-      context.strokeStyle = "#ff0000";
-      context.beginPath();
-      context.moveTo(bbox.min.x, bbox.min.y);
-      context.lineTo(bbox.min.x, bbox.max.y);
-      context.lineTo(bbox.max.x, bbox.max.y);
-      context.lineTo(bbox.max.x, bbox.min.y);
-      context.lineTo(bbox.min.x, bbox.min.y);
-      context.stroke();
-    }
-    */
-
     /* draw sleeping state */
     for (var i = 0; i < this.blocks.length; i++) {
       var block = this.blocks[i];
