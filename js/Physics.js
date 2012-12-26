@@ -75,6 +75,9 @@ function simulateBlocks(blocks, rdt) {
       //blocks.reverse();
       for (var i = 0; i < blocks.length; i++) {
         var block = blocks[i];
+        if (block.sleeping) {
+          continue;
+        }
 
         for (var j = 0; j < block.atoms.length; j++) {
           var atom = block.atoms[j];
@@ -110,8 +113,20 @@ function simulateBlocks(blocks, rdt) {
             }
           }
 
+          /*
           dx *= damping;
           dy *= damping;
+          */
+
+          /* put slow objects to sleep */
+          block.sleepHits++;
+          if (Math.abs(dx) + Math.abs(dy) > 0.3) {
+            block.sleepHits = 0;
+          }
+          if (block.sleepHits > 500) {
+            block.sleeping = true;
+            sleepHits = 0;
+          }
 
           oldatom.x = atom.x;
           oldatom.y = atom.y;
@@ -162,12 +177,37 @@ function simulateBlocks(blocks, rdt) {
           hashBlocks[r].computeCenter();
           var hit = block.collide(hashBlocks[r]);
           if (hit) {
+            var b1slf = 1;
+            var b2slf = 1;
+            if (hit.b1.sleeping && !hit.b2.sleeping) {
+              b2slf = 2;
+              b1slf = 0;
+            } else if (hit.b2.sleeping  && !hit.b1.sleeping) {
+              b1slf = 2;
+              b2slf = 0;
+            }
+
             var cv = {x : hit.normal.x * hit.depth, y : hit.normal.y * hit.depth};
-            hit.atom.x += cv.x * 0.5;
-            hit.atom.y += cv.y * 0.5;
+            hit.atom.x += cv.x * 0.5 * b1slf;
+            hit.atom.y += cv.y * 0.5 * b1slf;
+
+            /*
+            hit.b1.sleeping = false;
+            hit.b2.sleeping = false;
+            */
+            if (hit.b1.lastTouching != hit.b2) {
+              hit.b1.sleeping = false;
+            }
+            if (hit.b2.lastTouching != hit.b1) {
+              hit.b2.sleeping = false;
+            }
+            hit.b1.lastTouching = hit.b2;
+            hit.b2.lastTouching = hit.b1;
+
             var e1 = hit.b2.atoms[hit.edge[0]];
             var e2 = hit.b2.atoms[hit.edge[1]];
             var t;
+
 
             if (Math.abs(e1.x - e2.x) > Math.abs(e1.y - e2.y)) {
               t = (hit.atom.x - cv.x - e1.x) / (e2.x - e1.x);
@@ -176,10 +216,10 @@ function simulateBlocks(blocks, rdt) {
             }
 
             var lambda = 1 / (t * t + (1 - t) * (1 - t));
-            e1.x -= cv.x * (1 - t) * 0.5 * lambda;
-            e1.y -= cv.y * (1 - t) * 0.5 * lambda;
-            e2.x -= cv.x * t * 0.5 * lambda;
-            e2.y -= cv.y * t * 0.5 * lambda;
+            e1.x -= cv.x * (1 - t) * 0.5 * lambda * b2slf;
+            e1.y -= cv.y * (1 - t) * 0.5 * lambda * b2slf;
+            e2.x -= cv.x * t * 0.5 * lambda * b2slf;
+            e2.y -= cv.y * t * 0.5 * lambda * b2slf;
 
             /* hilarious.
             hit.b2.oldatoms[hit.edge[0]].x = hit.b2.atoms[hit.edge[0]].x;

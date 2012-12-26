@@ -134,8 +134,16 @@ function PlayState() {
     }
     */
 
+    /* draw sleeping state */
+    for (var i = 0; i < this.blocks.length; i++) {
+      var block = this.blocks[i];
+      if (block.sleeping) {
+        context.fillStyle = "#55ff55";
+        context.fillRect(block.atoms[0].x, block.atoms[0].y, 10, 10);
+      }
+    }
+
     drawString(this.blocks.length.toString(), 10, 10, "#000000");
-    //this.addBlock(new Block(context.width / 2 - 300 / 2, 80, 300, 20));
     drawRectangle(context.width / 2 - 300 / 2, context.height - 20, 300, 20, "#000000");
 
     if (this.hintBlock) {

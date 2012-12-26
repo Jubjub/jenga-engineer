@@ -4,6 +4,7 @@ Block = (function () {
     this.sprite = new Sprite(null, x, y);
     this.center = {};
     this.sleeping = false;
+    this.sleepHits = 0;
 
     this.sprite.makeGraphic(width, height, color);
     this.acceleration = {x: 0, y: 400};
@@ -14,7 +15,7 @@ Block = (function () {
                   {x: x + width, y: y + height}, {x: x, y: y + height}];
 
     var h = Math.sqrt(width * width + height * height);
-    this.edges = [[0, 1, width], [1, 2, height], [2, 3, width], [3, 0, height], [0, 2, h]];
+    this.edges = [[0, 1, width], [1, 2, height], [2, 3, width], [3, 0, height], [0, 2, h], [1, 3, h]];
     this.collisionEdgeCount = 4;
     this.touching = false;
     this.touchingGround = false;
