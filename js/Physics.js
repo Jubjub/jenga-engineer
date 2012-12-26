@@ -75,11 +75,8 @@ function simulateBlocks(blocks, rdt) {
       //blocks.reverse();
       for (var i = 0; i < blocks.length; i++) {
         var block = blocks[i];
-        if (block.sleeping) {
-          continue;
-        }
 
-        for (var j = 0; j < block.atoms.length; j++) {
+        for (var j = 0; j < block.atoms.length && !block.sleeping; j++) {
           var atom = block.atoms[j];
           var oldatom = block.oldatoms[j];
           var dx = atom.x - oldatom.x;
@@ -113,17 +110,15 @@ function simulateBlocks(blocks, rdt) {
             }
           }
 
-          /*
           dx *= damping;
           dy *= damping;
-          */
 
           /* put slow objects to sleep */
           block.sleepHits++;
           if (Math.abs(dx) + Math.abs(dy) > 0.3) {
             block.sleepHits = 0;
           }
-          if (block.sleepHits > 500) {
+          if (block.sleepHits > 1000) {
             block.sleeping = true;
             sleepHits = 0;
           }
@@ -171,6 +166,10 @@ function simulateBlocks(blocks, rdt) {
         var hashBlocks = shash.retrieve(block.bbox);
         for (var r = 0; r < hashBlocks.length; r++) {
           if (block == hashBlocks[r]) {
+            continue;
+          }
+
+          if (block.sleeping && hashBlocks[r].sleeping) {
             continue;
           }
 
