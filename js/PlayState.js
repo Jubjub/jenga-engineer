@@ -118,16 +118,25 @@ function PlayState() {
     /* Add new blocks */
     if (isMouseDown("left")) {
       if (this.canInsertBlock ) {
-        var colliding = false;
-        var hw = block.width / 2 + mouseX;
-        var hh = block.height / 2 + mouseY;
-        var shape = cp.BoxShape2(this.space.staticBody, new cp.BB(-hw, -hh, hw, hh));
+        if (this.hintBlock.lastShape) {
+          this.space.staticBody.removeShape(this.hintBlock.lastShape);
+        }
+
+        var hw = this.nextBlock.width / 2;
+        var hh = this.nextBlock.height / 2;
+        console.log(hw);
+        console.log(hh);
+        var shape = cp.BoxShape2(this.space.staticBody,
+                                 new cp.BB(-hw + mouseX, -hh + mouseY,
+                                           hw + mouseX, hh + mouseY));
         shape.sensor = true;
+        var colliding = false;
         this.space.shapeQuery(shape, function(a, set) {
           colliding = true;
         });
+        this.hintBlock.lastShape = shape;
 
-        //this.space.addShape(this.shape);
+        //this.space.addShape(shape);
         var blockPos = {x: mouseX - this.nextBlock.width / 2,
                         y: mouseY - this.nextBlock.height / 2};
 
