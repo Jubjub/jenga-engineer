@@ -16,8 +16,8 @@ function PlayState() {
       if (arb) {
         if (arb.a == space.game.ground|| arb.b == space.game.ground) {
           if (arb.b.name == "block" || arb.a.name == "block") {
-            switchState(new PlayState());
             socket.disconnect();
+            switchState(new PlayState());
           }
         }
 
@@ -34,6 +34,8 @@ function PlayState() {
     this.base.shape.name = "base";
     this.ground.setElasticity(0);
     this.ground.setFriction(1);
+
+    this.background = new Sprite("assets/img/bg.png", 0, 0);
 
     this.hintBlock = new Sprite(null, 0, 0);
     this.hintBlock.alpha = 0.5;
@@ -155,6 +157,7 @@ function PlayState() {
     }
 
     this.blockss.draw();
+    this.background.draw();
   }
 }
 
