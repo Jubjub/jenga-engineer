@@ -45,7 +45,7 @@ function PlayState() {
     this.ground.setFriction(1);
 
     this.background = new Sprite("assets/img/bg.png", 0, 0);
-    this.background.y -= this.background.internal.height;
+    this.background.y = -450;
 
     this.hintBlock = new Sprite(null, 0, 0);
     this.hintBlock.alpha = 0.5;
@@ -189,7 +189,7 @@ function PlayState() {
       }
     }
 
-    if (!getRandomInt(0, 60 * 20)) {
+    if (!getRandomInt(0, 60 * 10)) {
       var x = (getRandomInt(0, 1) * (640 + 70)) - 70;
       var cloud = new Sprite("assets/img/cloud1.png", x, getRandomInt(0, context.height - 400));
       cloud.speed = getRandomInt(20, 60);
