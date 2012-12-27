@@ -119,20 +119,17 @@ function PlayState() {
     if (isMouseDown("left")) {
       if (this.canInsertBlock ) {
         var colliding = false;
+        var hw = block.width / 2 + mouseX;
+        var hh = block.height / 2 + mouseY;
+        var shape = cp.BoxShape2(this.space.staticBody, new cp.BB(-hw, -hh, hw, hh));
+        shape.sensor = true;
+        this.space.shapeQuery(shape, function(a, set) {
+          colliding = true;
+        });
+
+        //this.space.addShape(this.shape);
         var blockPos = {x: mouseX - this.nextBlock.width / 2,
                         y: mouseY - this.nextBlock.height / 2};
-        var tmpBlock = new Block(blockPos.x, blockPos.y,
-                                 this.nextBlock.width, this.nextBlock.height);
-
-        /*
-        for (var i = 0; i < this.blocks.length; i++) {
-          colliding = colliding || (tmpBlock.collide(this.blocks[i]));
-
-          if (colliding) {
-            break;
-          }
-        }
-        */
 
         colliding = colliding || (mouseY + this.nextBlock.height / 2 > canvas.height - 20);
 
