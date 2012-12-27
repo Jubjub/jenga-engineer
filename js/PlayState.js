@@ -21,7 +21,7 @@ function PlayState() {
       if (arb) {
         if (arb.a.name == "block" && arb.b.name == "block") {
           var my = Math.min(arb.a.body.p.y, arb.b.body.p.y);
-          space.game.towerHeight = Math.max(space.game.towerHeight, (context.height - 20) - my);
+          space.game.towerHeight = Math.max(space.game.towerHeight, (context.height - 30) - my);
         }
         if (arb.a == space.game.ground|| arb.b == space.game.ground) {
           if (arb.b.name == "block" || arb.a.name == "block") {
@@ -38,20 +38,23 @@ function PlayState() {
                                       new cp.Vect(0, 480), new cp.Vect(640, 480), 0);
     this.ground.name = "ground";
     this.space.addShape(this.ground);
-    this.base = new Block(context.width / 2 - 300 / 2, context.height - 40, 300, 20, "black");
+    this.base = new Block(context.width / 2 - 300 / 2, context.height - 40, 300, 30, "#0", -1);
+    this.base.sprite.makeGraphic(this.base.width, this.base.height, "black");
     this.addBlock(this.base);
     this.base.shape.name = "base";
     this.ground.setElasticity(0);
     this.ground.setFriction(1);
 
-    this.background = new Sprite("assets/img/bg.png", 0, 0);
-    this.background.y = -450;
+    this.background = new Sprite("assets/img/bg.png", -2, 0);
+    this.background.y = -520;
 
     this.hintBlock = new Sprite(null, 0, 0);
     this.hintBlock.alpha = 0.5;
 
     this.canInsertBlock = true;
-    this.nextBlock = {width: getRandomInt(10, 100), height: getRandomInt(10, 50)};
+    this.nextBlock = {width: getRandomInt(30, 30 * 4), height: getRandomInt(30, 31)};
+    this.nextBlock.width = Math.round(this.nextBlock.width / 30) * 30;
+    this.nextBlock.height = Math.round(this.nextBlock.height / 30) * 30;
 
     var possibleColors = ["red", "blue", "green", "pink", "gray", "blue"];
     // this.color = "#" + Math.floor(Math.random() * 16777215).toString(16);
@@ -155,11 +158,10 @@ function PlayState() {
 
         this.hintBlock.lastShape = shape;
 
-        //this.space.addShape(shape);
         var blockPos = {x: mouseX - this.nextBlock.width / 2,
                         y: mouseY - this.nextBlock.height / 2};
 
-        colliding = colliding || (mouseY + this.nextBlock.height / 2 > canvas.height - 20);
+        colliding = colliding || (mouseY + this.nextBlock.height / 2 > canvas.height - 30);
 
         if (!colliding) {
           this.addBlock(new Block(blockPos.x, blockPos.y,
@@ -171,7 +173,9 @@ function PlayState() {
                                    height: this.nextBlock.height,
                                    color: this.color});
 
-          this.nextBlock = {width: getRandomInt(10, 100), height: getRandomInt(10, 50)};
+          this.nextBlock = {width: getRandomInt(30, 30 * 4), height: getRandomInt(30, 31)};
+          this.nextBlock.width = Math.round(this.nextBlock.width / 30) * 30;
+          this.nextBlock.height = Math.round(this.nextBlock.height / 30) * 30;
           this.canInsertBlock = false;
         }
       }
