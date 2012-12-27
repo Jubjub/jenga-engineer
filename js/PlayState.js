@@ -164,6 +164,9 @@ function PlayState() {
     for (var i = 0; i < this.clouds.sprites.length; i++) {
       var cloud = this.clouds.sprites[i];
       cloud.x += cloud.speed * this.dt;
+      if (cloud.x < - 70 || cloud.x > (640 + 70)) {
+        this.clouds.remove(cloud);
+      }
     }
     if (!getRandomInt(0, 60 * 10)) {
       var x = (getRandomInt(0, 1) * (640 + 70)) - 70;
