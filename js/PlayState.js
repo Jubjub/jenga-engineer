@@ -40,6 +40,7 @@ function PlayState() {
     this.ground.setFriction(1);
 
     this.background = new Sprite("assets/img/bg.png", 0, 0);
+    this.background.y -= this.background.internal.height;
 
     this.hintBlock = new Sprite(null, 0, 0);
     this.hintBlock.alpha = 0.5;
@@ -93,6 +94,8 @@ function PlayState() {
   }
 
   this.update = function() {
+
+    this.camera.y -= 10 * this.dt;
 
     /* timestep slicing */
     this.accumulator += this.dt;
