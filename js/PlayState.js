@@ -47,7 +47,9 @@ function PlayState() {
     this.canInsertBlock = true;
     this.nextBlock = {width: getRandomInt(10, 100), height: getRandomInt(10, 50)};
 
-    this.color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+    var possibleColors = ["red", "blue", "green", "pink", "gray", "blue"];
+    // this.color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+    this.color = possibleColors[Math.floor(Math.random() * possibleColors.length)];
 
     preventKeys("down", "right", "left", "right", "space", "r");
 
