@@ -134,6 +134,7 @@ function PlayState() {
         this.space.shapeQuery(shape, function(a, set) {
           colliding = true;
         });
+
         this.hintBlock.lastShape = shape;
 
         //this.space.addShape(shape);
@@ -164,18 +165,22 @@ function PlayState() {
     for (var i = 0; i < this.clouds.sprites.length; i++) {
       var cloud = this.clouds.sprites[i];
       cloud.x += cloud.speed * this.dt;
+
       if (cloud.x < - 70 || cloud.x > (640 + 70)) {
         this.clouds.remove(cloud);
       }
     }
-    if (!getRandomInt(0, 60 * 10)) {
+
+    if (!getRandomInt(0, 60 * 20)) {
       var x = (getRandomInt(0, 1) * (640 + 70)) - 70;
-      var cloud = new Sprite("assets/img/cloud1.png", x, getRandomInt(0, context.height - 200));
+      var cloud = new Sprite("assets/img/cloud1.png", x, getRandomInt(0, context.height - 400));
       cloud.speed = getRandomInt(20, 60);
+
       if (x > 0) {
         cloud.speed *= -1;
       }
-      console.log("cloud added");
+
+      console.log("Cloud added.");
       this.clouds.push(cloud);
     }
   }
