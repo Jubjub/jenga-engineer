@@ -17,6 +17,18 @@ function PlayState() {
     this.space.gravity = new cp.Vect(0, 150);
     this.space.game = this;
 
+    /* sound */
+    var cha = new Audio();
+    var canPlayOgg = !!cha.canPlayType && cha.canPlayType('audio/ogg; codecs="vorbis"') != "";
+    var lpath = "assets/sound/test_loop.ogg";
+    if (!canPlayOgg) {
+      lpat = "assets/sound/test_loop.mp3";
+    }
+    this.bgloop = new Audio(lpath);
+
+    this.bgloop.loop = true;
+    this.bgloop.play();
+
     this.space.setDefaultCollisionHandler(null, function(arb, space) {
       if (arb) {
         if (arb.a.name == "block" && arb.b.name == "block") {
