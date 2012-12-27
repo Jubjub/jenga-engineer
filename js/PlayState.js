@@ -20,6 +20,7 @@ function PlayState() {
             socket.disconnect();
           }
         }
+
         return true;
       }
     }, null, null);
