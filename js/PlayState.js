@@ -29,7 +29,7 @@ function PlayState() {
                                       new cp.Vect(0, 480), new cp.Vect(640, 480), 0);
     this.ground.name = "ground";
     this.space.addShape(this.ground);
-    this.base = new Block(context.width / 2 - 300 / 2, context.height - 40, 300, 20);
+    this.base = new Block(context.width / 2 - 300 / 2, context.height - 40, 300, 20, "black");
     this.addBlock(this.base);
     this.base.shape.name = "base";
     this.ground.setElasticity(0);
