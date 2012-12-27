@@ -10,8 +10,24 @@ function PlayState() {
     this.space = new cp.Space();
     this.space.iterations = 10;
     this.space.gravity = new cp.Vect(0, 150);
-    this.ground = this.space.addShape(new cp.SegmentShape(this.space.staticBody,
-                                      new cp.Vect(0, 460), new cp.Vect(640, 460), 1));
+    this.space.game = this;
+    this.space.setDefaultCollisionHandler(null, function(arb, space) {
+      if (arb) {
+        if (arb.a == space.game.ground|| arb.b == space.game.ground) {
+          if (arb.b.name == "block" || arb.a.name == "block") {
+            switchState(new PlayState());
+          }
+        }
+        return true;
+      }
+    }, null, null);
+    this.ground = new cp.SegmentShape(this.space.staticBody,
+                                      new cp.Vect(0, 480), new cp.Vect(640, 480), 0);
+    this.ground.name = "ground";
+    this.space.addShape(this.ground);
+    this.base = new Block(context.width / 2 - 300 / 2, context.height - 40, 300, 20);
+    this.addBlock(this.base);
+    this.base.shape.name = "base";
     this.ground.setElasticity(0);
     this.ground.setFriction(1);
 
@@ -61,6 +77,7 @@ function PlayState() {
     block.shape = this.space.addShape(new cp.BoxShape(block.body, block.width, block.height));
     block.shape.setElasticity(0);
     block.shape.setFriction(1);
+    block.shape.name = "block";
     this.blocks.push(block);
     this.blockss.push(block.sprite);
   }
@@ -128,7 +145,6 @@ function PlayState() {
     clearCanvas();
 
     drawString(this.blocks.length.toString(), 10, 10, "#000000");
-    drawRectangle(context.width / 2 - 300 / 2, context.height - 20, 300, 20, "#000000");
 
     if (this.hintBlock) {
       this.hintBlock.draw();
