@@ -6,6 +6,7 @@ function PlayState() {
   this.setup = function() {
     this.blocks = [];
     this.blockss = new SpriteList();
+    this.clouds = new SpriteList();
 
     this.accumulator = 0;
     this.timestep = 0.01666666666;
@@ -93,12 +94,14 @@ function PlayState() {
 
   this.update = function() {
 
+    /* timestep slicing */
     this.accumulator += this.dt;
     while (this.accumulator >= this.timestep) {
       this.space.step(this.timestep);
       this.accumulator -= this.timestep;
     }
 
+    /* update each block position and angle */
     for (var i = 0; i < this.blocks.length; i++) {
       var block = this.blocks[i];
       block.sprite.x = block.body.p.x - block.width / 2;
@@ -111,7 +114,6 @@ function PlayState() {
       this.hintBlock.makeGraphic(this.nextBlock.width, this.nextBlock.height, 'black');
       this.hintBlock.nextBlock = this.nextBlock;
     }
-
     this.hintBlock.x = mouseX - this.nextBlock.width / 2;
     this.hintBlock.y = mouseY - this.nextBlock.height / 2;
 
@@ -124,8 +126,6 @@ function PlayState() {
 
         var hw = this.nextBlock.width / 2;
         var hh = this.nextBlock.height / 2;
-        console.log(hw);
-        console.log(hh);
         var shape = cp.BoxShape2(this.space.staticBody,
                                  new cp.BB(-hw + mouseX, -hh + mouseY,
                                            hw + mouseX, hh + mouseY));
@@ -159,6 +159,22 @@ function PlayState() {
     } else {
       this.canInsertBlock = true;
     }
+
+    /* clouds! */
+    for (var i = 0; i < this.clouds.sprites.length; i++) {
+      var cloud = this.clouds.sprites[i];
+      cloud.x += cloud.speed * this.dt;
+    }
+    if (!getRandomInt(0, 60 * 10)) {
+      var x = (getRandomInt(0, 1) * (640 + 70)) - 70;
+      var cloud = new Sprite("assets/img/cloud1.png", x, getRandomInt(0, context.height - 200));
+      cloud.speed = getRandomInt(20, 60);
+      if (x > 0) {
+        cloud.speed *= -1;
+      }
+      console.log("cloud added");
+      this.clouds.push(cloud);
+    }
   }
 
   this.draw = function() {
@@ -171,6 +187,7 @@ function PlayState() {
     }
 
     this.blockss.draw();
+    this.clouds.draw();
     this.background.draw();
   }
 }
