@@ -11,16 +11,19 @@ function PlayState() {
     this.space.iterations = 10;
     this.space.gravity = new cp.Vect(0, 150);
     this.space.game = this;
+
     this.space.setDefaultCollisionHandler(null, function(arb, space) {
       if (arb) {
         if (arb.a == space.game.ground|| arb.b == space.game.ground) {
           if (arb.b.name == "block" || arb.a.name == "block") {
             switchState(new PlayState());
+            socket.disconnect();
           }
         }
         return true;
       }
     }, null, null);
+
     this.ground = new cp.SegmentShape(this.space.staticBody,
                                       new cp.Vect(0, 480), new cp.Vect(640, 480), 0);
     this.ground.name = "ground";
@@ -38,7 +41,7 @@ function PlayState() {
     this.nextBlock = {width: getRandomInt(10, 100), height: getRandomInt(10, 50)};
 
     this.color = "#" + Math.floor(Math.random() * 16777215).toString(16);
-    
+
     preventKeys("down", "right", "left", "right", "space", "r");
 
     /* Network */
@@ -71,7 +74,7 @@ function PlayState() {
 
   this.addBlock = function(block) {
     block.body = this.space.addBody(new cp.Body(1, cp.momentForBox(1, block.width,
-                                                                        block.height)));
+                                                                   block.height)));
     block.body.setPos(new cp.Vect(block.sprite.x + block.width / 2,
                                   block.sprite.y + block.height / 2));
     block.shape = this.space.addShape(new cp.BoxShape(block.body, block.width, block.height));
