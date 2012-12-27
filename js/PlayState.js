@@ -7,6 +7,9 @@ function PlayState() {
     this.blocks = [];
     this.blockss = new SpriteList();
 
+    this.accumulator = 0;
+    this.timestep = 0.01666666666;
+
     this.space = new cp.Space();
     this.space.iterations = 10;
     this.space.gravity = new cp.Vect(0, 150);
@@ -89,7 +92,12 @@ function PlayState() {
   }
 
   this.update = function() {
-    this.space.step(this.dt);
+
+    this.accumulator += this.dt;
+    while (this.accumulator >= this.timestep) {
+      this.space.step(this.timestep);
+      this.accumulator -= this.timestep;
+    }
 
     for (var i = 0; i < this.blocks.length; i++) {
       var block = this.blocks[i];
