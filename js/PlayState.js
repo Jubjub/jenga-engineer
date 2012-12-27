@@ -7,6 +7,7 @@ function PlayState() {
     this.blocks = [];
     this.blockss = new SpriteList();
     this.clouds = new SpriteList();
+    this.towerHeight = 0;
 
     this.accumulator = 0;
     this.timestep = 0.01666666666;
@@ -18,6 +19,10 @@ function PlayState() {
 
     this.space.setDefaultCollisionHandler(null, function(arb, space) {
       if (arb) {
+        if (arb.a.name == "block" && arb.b.name == "block") {
+          var my = Math.min(arb.a.body.p.y, arb.b.body.p.y);
+          space.game.towerHeight = Math.max(space.game.towerHeight, (context.height - 20) - my);
+        }
         if (arb.a == space.game.ground|| arb.b == space.game.ground) {
           if (arb.b.name == "block" || arb.a.name == "block") {
             socket.disconnect();
@@ -97,7 +102,15 @@ function PlayState() {
 
   this.update = function() {
 
-    this.camera.y -= 10 * this.dt;
+    /* move camera with tower */
+    if (this.towerHeight > 300) {
+      /* TODO: do this with some tweening library or add it to pentagine so it
+       * doesn't look so boring/sudden */
+      var target = -(this.towerHeight - 300);
+      if (this.camera.y > target) {
+        this.camera.y -= 10 * this.dt;
+      }
+    }
 
     /* timestep slicing */
     this.accumulator += this.dt;
