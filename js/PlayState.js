@@ -163,7 +163,7 @@ function PlayState() {
       this.canInsertBlock = true;
     }
 
-    /* clouds! */
+    /* Clouds! */
     for (var i = 0; i < this.clouds.sprites.length; i++) {
       var cloud = this.clouds.sprites[i];
       cloud.x += cloud.speed * this.dt;
