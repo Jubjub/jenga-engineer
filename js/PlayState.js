@@ -44,8 +44,8 @@ function PlayState() {
               arb.b.block.playedSfx = true;
             }
           }
-
         }
+        
         if (arb.a == space.game.ground|| arb.b == space.game.ground) {
           if (arb.b.name == "block" || arb.a.name == "block") {
             socket.disconnect();
