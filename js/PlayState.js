@@ -142,6 +142,8 @@ function PlayState() {
       for (var id in msg) {
         this.data.game.blockMap[id].body.setPos(msg[id][0]);
         this.data.game.blockMap[id].body.setAngle(msg[id][1]);
+        this.data.game.blockMap[id].body.setVel(msg[id][2]);
+        this.data.game.blockMap[id].body.setAngVel(msg[id][3]);
       }
     });
   }
@@ -151,7 +153,9 @@ function PlayState() {
     //console.log("sending physics fix");
     var msg = {};
     for (var id in game.blockMap) {
-      msg[id] = [game.blockMap[id].body.p, game.blockMap[id].body.a];
+      var block = game.blockMap[id];
+      msg[id] = [block.body.p, block.body.a, {x: block.body.vx, y: block.body.vy},
+                 block.body.w];
     }
     socket.emit("fixcanonical", msg);
   }
