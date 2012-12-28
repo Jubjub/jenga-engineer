@@ -29,3 +29,16 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function playSound(path) {
+    var cha = new Audio();
+    var canPlayOgg = !!cha.canPlayType && cha.canPlayType('audio/ogg; codecs="vorbis"') != "";
+    if (canPlayOgg) {
+      path = path + ".ogg";
+    } else {
+      path = path + ".mp3";
+    }
+    cha = new Audio(path);
+    cha.play();
+    return cha;
+}
+

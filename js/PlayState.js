@@ -24,23 +24,31 @@ function PlayState() {
     if (!canPlayOgg) {
       lpat = "assets/sound/test_loop.mp3";
     }
-
     this.bgloop = new Audio(lpath);
 
     this.bgloop.loop = true;
-    this.bgloop.play();
+    //this.bgloop.play();
 
-    var playState = this;
     this.space.setDefaultCollisionHandler(null, function(arb, space) {
       if (arb) {
         if (arb.a.name == "block" && arb.b.name == "block") {
           var my = Math.min(arb.a.body.p.y, arb.b.body.p.y);
           space.game.towerHeight = Math.max(space.game.towerHeight, (context.height - 30) - my);
-        }
 
+          /* play collision sfx */
+          if (arb.a.block.type == 0 && arb.b.block.type == 0) {
+            /* metal on metal */
+            if (!arb.a.block.playedSfx || ! arb.b.block.playedSfx) {
+              console.log("metall on metal");
+              playSound("assets/sound/metal_on_metal");
+              arb.a.block.playedSfx = true;
+              arb.b.block.playedSfx = true;
+            }
+          }
+
+        }
         if (arb.a == space.game.ground|| arb.b == space.game.ground) {
           if (arb.b.name == "block" || arb.a.name == "block") {
-            playState.bgloop.pause();
             socket.disconnect();
             space.game.bgloop.loop = false;
             space.game.bgloop.pause();
@@ -117,6 +125,7 @@ function PlayState() {
     block.shape.setElasticity(0);
     block.shape.setFriction(1);
     block.shape.name = "block";
+    block.shape.block = block;
     this.blocks.push(block);
     this.blockss.push(block.sprite);
   }
@@ -153,7 +162,6 @@ function PlayState() {
       this.hintBlock.makeGraphic(this.nextBlock.width, this.nextBlock.height, 'black');
       this.hintBlock.nextBlock = this.nextBlock;
     }
-
     this.hintBlock.x = mouseX - this.nextBlock.width / 2;
     this.hintBlock.y = mouseY - this.nextBlock.height / 2;
 
