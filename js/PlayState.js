@@ -71,7 +71,7 @@ function PlayState() {
     this.ground.setFriction(1);
 
     this.background = new Sprite("assets/img/bg.png", -2, 0);
-    this.background.y = -520;
+    this.background.y = -1590 + 480 + 10;
 
     this.hintBlock = new Sprite(null, 0, 0);
     this.hintBlock.alpha = 0.5;
