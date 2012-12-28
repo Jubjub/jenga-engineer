@@ -14,16 +14,15 @@ Block = (function () {
     this.width = width;
     this.height = height;
     //this.sprite.makeGraphic(width, height, "#333333");
-    this.sprite.makeGraphic(width, height, "transparent");
-    //this.sprite.stampRect(1, 1, width - 2, height - 2, color);
+    this.sprite.makeGraphic(width + 2, height + 2, color);
+    this.sprite.internalctx.clearRect(1, 1, width - 2, height - 2);
     if (this.type >= 0) {
-      for (var x = 0; x <= width; x += 30) {
-        this.sprite.stampImage(x, 0, blockTypes[this.type]);
+      for (var x = 1; x <= width; x += 30) {
+        this.sprite.stampImage(x, 1, blockTypes[this.type]);
       }
     }
     this.sprite.offset.x += width / 2;
     this.sprite.offset.y += height / 2;
-    this.acceleration = {x: 0, y: 400};
   }
 
   constructor.prototype = {
