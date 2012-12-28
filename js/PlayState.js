@@ -35,14 +35,21 @@ function PlayState() {
           var my = Math.min(arb.a.body.p.y, arb.b.body.p.y);
           space.game.towerHeight = Math.max(space.game.towerHeight, (context.height - 30) - my);
 
-          /* play collision sfx */
-          if (arb.a.block.type == 0 && arb.b.block.type == 0) {
-            /* metal on metal */
-            if (!arb.a.block.playedSfx || ! arb.b.block.playedSfx) {
+          var soundBlock = arb.a.block;
+          if (soundBlock.playedSfx) {
+            soundBlock = arb.b.block;
+          }
+          if (!soundBlock.playedSfx) {
+
+            if (soundBlock.type == 0) {
               playSound("assets/sound/metal_on_metal");
-              arb.a.block.playedSfx = true;
-              arb.b.block.playedSfx = true;
+            } else if (soundBlock.type == 1) {
+              playSound("assets/sound/brick_on_brick");
+            } else if (soundBlock.type == 2) {
+              playSound("assets/sound/wood_on_wood");
             }
+            soundBlock.playedSfx = true;
+
           }
         }
         
