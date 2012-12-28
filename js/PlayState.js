@@ -38,6 +38,8 @@ function PlayState() {
         if (arb.a == space.game.ground|| arb.b == space.game.ground) {
           if (arb.b.name == "block" || arb.a.name == "block") {
             socket.disconnect();
+            space.game.bgloop.loop = false;
+            space.game.bgloop.pause();
             switchState(new PlayState());
           }
         }
