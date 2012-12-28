@@ -84,7 +84,6 @@ function PlayState() {
     this.blockMap = {};
 
     var possibleColors = ["red", "blue", "green", "pink", "gray", "blue"];
-    // this.color = "#" + Math.floor(Math.random() * 16777215).toString(16);
     this.color = possibleColors[Math.floor(Math.random() * possibleColors.length)];
 
     preventKeys("down", "right", "left", "right", "space", "r");
@@ -132,6 +131,7 @@ function PlayState() {
         //console.log("ignoring");
         return;
       }
+
       for (var id in msg) {
         this.data.game.blockMap[id].body.setPos(msg[id][0]);
         this.data.game.blockMap[id].body.setAngle(msg[id][1]);
@@ -154,11 +154,13 @@ function PlayState() {
                                                                    block.height)));
     block.body.setPos(new cp.Vect(block.sprite.x + block.width / 2,
                                   block.sprite.y + block.height / 2));
+
     block.shape = this.space.addShape(new cp.BoxShape(block.body, block.width, block.height));
     block.shape.setElasticity(0);
     block.shape.setFriction(1);
     block.shape.name = "block";
     block.shape.block = block;
+
     this.blocks.push(block);
     this.blockss.push(block.sprite);
   }
