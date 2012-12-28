@@ -24,19 +24,23 @@ function PlayState() {
     if (!canPlayOgg) {
       lpat = "assets/sound/test_loop.mp3";
     }
+
     this.bgloop = new Audio(lpath);
 
     this.bgloop.loop = true;
     this.bgloop.play();
 
+    var playState = this;
     this.space.setDefaultCollisionHandler(null, function(arb, space) {
       if (arb) {
         if (arb.a.name == "block" && arb.b.name == "block") {
           var my = Math.min(arb.a.body.p.y, arb.b.body.p.y);
           space.game.towerHeight = Math.max(space.game.towerHeight, (context.height - 30) - my);
         }
+
         if (arb.a == space.game.ground|| arb.b == space.game.ground) {
           if (arb.b.name == "block" || arb.a.name == "block") {
+            playState.bgloop.pause();
             socket.disconnect();
             space.game.bgloop.loop = false;
             space.game.bgloop.pause();
@@ -149,6 +153,7 @@ function PlayState() {
       this.hintBlock.makeGraphic(this.nextBlock.width, this.nextBlock.height, 'black');
       this.hintBlock.nextBlock = this.nextBlock;
     }
+
     this.hintBlock.x = mouseX - this.nextBlock.width / 2;
     this.hintBlock.y = mouseY - this.nextBlock.height / 2;
 
