@@ -39,7 +39,6 @@ function PlayState() {
           if (arb.a.block.type == 0 && arb.b.block.type == 0) {
             /* metal on metal */
             if (!arb.a.block.playedSfx || ! arb.b.block.playedSfx) {
-              console.log("metall on metal");
               playSound("assets/sound/metal_on_metal");
               arb.a.block.playedSfx = true;
               arb.b.block.playedSfx = true;
@@ -82,6 +81,8 @@ function PlayState() {
     this.nextBlock.width = Math.round(this.nextBlock.width / 30) * 30;
     this.nextBlock.height = Math.round(this.nextBlock.height / 30) * 30;
 
+    this.blockMap = {};
+
     var possibleColors = ["red", "blue", "green", "pink", "gray", "blue"];
     // this.color = "#" + Math.floor(Math.random() * 16777215).toString(16);
     this.color = possibleColors[Math.floor(Math.random() * possibleColors.length)];
@@ -105,15 +106,47 @@ function PlayState() {
       socket.data.id = msg.id;
     });
 
+    socket.on("fixer", function(msg) {
+      /* start sending physics fixes */
+      console.log("this client has been selected as fixer");
+      socket.data.game.isFixer = true;
+      setInterval(this.data.game.sendPhysicsFix, 100);
+    });
+
     socket.on("blockcreated", function(msg) {
-      console.log("received block from server");
+      console.log("received block from server, id " + msg.id);
 
       if (msg.creator == socket.data.id) {
         return;
       }
 
-      socket.data.game.addBlock(new Block(msg.x, msg.y, msg.width, msg.height, msg.color));
+      var newBlock = new Block(msg.x, msg.y, msg.width, msg.height, msg.color);
+      socket.data.game.addBlock(newBlock);
+      newBlock.id = msg.id;
+      socket.data.game.blockMap[msg.id] = newBlock;
     });
+
+    socket.on("fix", function(msg) {
+      console.log("received physics fix");
+      if (this.data.game.isFixer) {
+        console.log("ignoring");
+        return;
+      }
+      for (var id in msg) {
+        this.data.game.blockMap[id].body.setPos(msg[id][0]);
+        this.data.game.blockMap[id].body.setAngle(msg[id][1]);
+      }
+    });
+  }
+
+  this.sendPhysicsFix = function() {
+    var game = currentState;
+    console.log("sending physics fix");
+    var msg = {};
+    for (var id in game.blockMap) {
+      msg[id] = [game.blockMap[id].body.p, game.blockMap[id].body.a];
+    }
+    socket.emit("fixcanonical", msg);
   }
 
   this.addBlock = function(block) {
@@ -191,13 +224,17 @@ function PlayState() {
         colliding = colliding || (mouseY + this.nextBlock.height / 2 > canvas.height - 30);
 
         if (!colliding) {
-          this.addBlock(new Block(blockPos.x, blockPos.y,
+          var newBlock = new Block(blockPos.x, blockPos.y,
                                   this.nextBlock.width, this.nextBlock.height,
-                                  this.color));
+                                  this.color)
+          newBlock.id = uniqueID();
+          this.addBlock(newBlock);
+          this.blockMap[newBlock.id] = newBlock;
           socket.emit("newblock", {x: blockPos.x,
                                    y: blockPos.y,
                                    width: this.nextBlock.width,
                                    height: this.nextBlock.height,
+                                   id: newBlock.id,
                                    color: this.color});
 
           this.nextBlock = {width: getRandomInt(30, 30 * 4), height: getRandomInt(30, 31)};

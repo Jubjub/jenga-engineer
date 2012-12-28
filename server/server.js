@@ -17,6 +17,10 @@ io.sockets.on("connection", function(socket) {
     console.log("client requested join to room " + msg.room);
     socket.join(msg.room);
     console.log("granted");
+    if (io.sockets.clients(msg.room).length == 1) {
+      console.log("assigning fixer role to " + socket.data.ip);
+      socket.emit("fixer");
+    }
   });
 
   socket.on("newblock", function(msg) {
@@ -26,5 +30,10 @@ io.sockets.on("connection", function(socket) {
     var room = io.sockets.manager.roomClients[socket.id][0];
     msg.creator = socket.id;
     io.sockets.in(room).emit("blockcreated", msg);
+  });
+
+  socket.on("fixcanonical", function(msg) {
+    var room = io.sockets.manager.roomClients[socket.id][0];
+    io.sockets.in(room).emit("fix", msg);
   });
 });

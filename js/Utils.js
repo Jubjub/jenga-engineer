@@ -42,3 +42,7 @@ function playSound(path) {
     return cha;
 }
 
+function uniqueID() {
+  return ((new Date()).getTime()).toString(16) + getRandomInt(0, 8000000).toString(16);
+}
+
