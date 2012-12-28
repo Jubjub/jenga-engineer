@@ -1,13 +1,14 @@
 var blockTypes = ["assets/img/block_lattice.png",
-             "assets/img/block_brick.png"
-            ];
+                  "assets/img/block_brick.png",
+                  "assets/img/block_wood.png"
+                 ];
 
 /* Basic construction piece */
 Block = (function () {
   function constructor(x, y, width, height, color, type) {
     this.sprite = new Sprite(null, x, y);
     if (!type) {
-      type = getRandomInt(0, 1);
+      type = getRandomInt(0, blockTypes.length - 1);
     }
     this.type = type;
     this.width = width;

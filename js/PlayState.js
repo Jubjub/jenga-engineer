@@ -127,9 +127,9 @@ function PlayState() {
     });
 
     socket.on("fix", function(msg) {
-      console.log("received physics fix");
+      //console.log("received physics fix");
       if (this.data.game.isFixer) {
-        console.log("ignoring");
+        //console.log("ignoring");
         return;
       }
       for (var id in msg) {
@@ -141,7 +141,7 @@ function PlayState() {
 
   this.sendPhysicsFix = function() {
     var game = currentState;
-    console.log("sending physics fix");
+    //console.log("sending physics fix");
     var msg = {};
     for (var id in game.blockMap) {
       msg[id] = [game.blockMap[id].body.p, game.blockMap[id].body.a];
