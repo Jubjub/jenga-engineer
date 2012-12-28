@@ -288,6 +288,6 @@ function PlayState() {
   }
 }
 
-var playState = new PlayState();
-desiredFPS = 60;
-switchState(playState);
+// var playState = new PlayState();
+// desiredFPS = 60;
+// switchState(playState);

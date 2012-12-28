@@ -2,11 +2,6 @@
 
 function MenuState() {
   this.setup = function() {
-    this.global = new SpriteList();
-    this.label = new Sprite(null, 50, 0);
-    this.label.makeLabel("Jenga Engineer", 70, "Verdana", "black");
-    this.global.push(this.label);
-
     preventKeys("down", "right", "left", "right", "space");
 
     /* Establish a link to the server */
@@ -23,6 +18,11 @@ function MenuState() {
 
   this.draw = function() {
     clearCanvas();
-    this.global.draw();
+
+    currentFont = "70px Verdana";
+    drawString("Jenga Engineer", 55, 80, "black");
   }
 }
+
+switchState(new MenuState());
+desiredFPS = 60;
