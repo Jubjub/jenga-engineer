@@ -276,7 +276,8 @@ function PlayState() {
   this.draw = function() {
     clearCanvas();
 
-    drawString(this.blocks.length.toString(), 10, 10, "#000000");
+    currentFont = "12px Verdana";
+    drawString(this.blocks.length.toString(), 5, 13, "#000000");
 
     if (this.hintBlock) {
       this.hintBlock.draw();
