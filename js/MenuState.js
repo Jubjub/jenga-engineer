@@ -4,9 +4,6 @@ function MenuState() {
   this.setup = function() {
     preventKeys("down", "right", "left", "right", "space");
 
-    /* Establish a link to the server */
-    socket = io.connect("http://localhost");
-    socket.emit("hello", {source: "development"});
   }
 
   this.update = function() {
