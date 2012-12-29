@@ -13,7 +13,7 @@ function PlayState() {
     this.timestep = 0.01666666666;
 
     this.space = new cp.Space();
-    this.space.iterations = 10;
+    this.space.iterations = 20;
     this.space.gravity = new cp.Vect(0, 150);
     this.space.game = this;
 
