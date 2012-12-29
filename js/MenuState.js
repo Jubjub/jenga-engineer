@@ -17,11 +17,6 @@ function MenuState() {
   this.draw = function() {
     clearCanvas();
     this.bg.draw();
-
-    /*
-    currentFont = "70px Verdana";
-    drawString("Jenga Engineer", 55, 80, "black");
-    */
   }
 }
 
