@@ -8,7 +8,9 @@ function MenuState() {
 
   this.update = function() {
     if (isDown("space") || isMouseDown("left")) {
-      switchState(new PlayState());
+      setTimeout(function() {
+        switchState(new PlayState());
+      }, 500);
     }
   }
 
@@ -23,5 +25,5 @@ function MenuState() {
   }
 }
 
-switchState(new MenuState());
 desiredFPS = 60;
+switchState(new MenuState());
