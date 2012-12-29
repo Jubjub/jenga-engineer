@@ -251,6 +251,11 @@ function PlayState() {
                                    color: this.color});
 
           this.nextBlock = {width: getRandomInt(30, 30 * 4), height: getRandomInt(30, 31)};
+          if (!getRandomInt(0, 3)) {
+            var tmp = this.nextBlock.width;
+            this.nextBlock.width = this.nextBlock.height;
+            this.nextBlock.height = tmp;
+          }
           this.nextBlock.width = Math.round(this.nextBlock.width / 30) * 30;
           this.nextBlock.height = Math.round(this.nextBlock.height / 30) * 30;
           this.canInsertBlock = false;

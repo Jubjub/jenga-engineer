@@ -17,8 +17,14 @@ Block = (function () {
     this.sprite.makeGraphic(width + 2, height + 2, color);
     this.sprite.internalctx.clearRect(1, 1, width - 2, height - 2);
     if (this.type >= 0) {
-      for (var x = 1; x <= width; x += 30) {
-        this.sprite.stampImage(x, 1, blockTypes[this.type]);
+      if (width > height) {
+        for (var x = 1; x <= width; x += 30) {
+          this.sprite.stampImage(x, 1, blockTypes[this.type]);
+        }
+      } else {
+        for (var y = 1; y <= height; y += 30) {
+          this.sprite.stampImage(1, y, blockTypes[this.type]);
+        }
       }
     }
     this.sprite.offset.x += width / 2;
