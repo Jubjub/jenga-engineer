@@ -179,13 +179,24 @@ function PlayState() {
   this.update = function() {
 
     /* move camera with tower */
+    /*
     if (this.towerHeight > 300) {
       /* TODO: do this with some tweening library or add it to pentagine so it
        * doesn't look so boring/sudden */
+    /*
       var target = -(this.towerHeight - 300);
       if (this.camera.y > target) {
         this.camera.y -= 10 * this.dt;
       }
+    }
+    */
+
+    /* move camera with mouse */
+    if (mouseY - this.camera.y < 30) {
+      this.camera.y -= 30 * this.dt;
+    }
+    if (mouseY - this.camera.y > 440 && this.camera.y < 0) {
+      this.camera.y += 30 * this.dt;
     }
 
     /* timestep slicing */
