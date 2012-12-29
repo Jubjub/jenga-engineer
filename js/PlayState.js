@@ -70,7 +70,7 @@ function PlayState() {
                                       new cp.Vect(0, 480), new cp.Vect(640, 480), 0);
     this.ground.name = "ground";
     this.space.addShape(this.ground);
-    this.base = new Block(context.width / 2 - 300 / 2, context.height - 40, 300, 30, "#0", -1);
+    this.base = new Block(context.width / 2 - 225 / 2, context.height - 40, 225, 30, "#0", -1);
     this.base.sprite.makeGraphic(this.base.width, this.base.height, "black");
     this.addBlock(this.base);
     this.base.shape.name = "base";
