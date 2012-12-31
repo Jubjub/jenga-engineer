@@ -1,5 +1,3 @@
-/* keep socket external for reconnection */
-var socket;
 
 /* Main game state */
 function PlayState() {
@@ -55,10 +53,7 @@ function PlayState() {
         
         if (arb.a == space.game.ground|| arb.b == space.game.ground) {
           if (arb.b.name == "block" || arb.a.name == "block") {
-            socket.disconnect();
-            space.game.bgloop.loop = false;
-            space.game.bgloop.pause();
-            switchState(new PlayState());
+            socket.emit("gameended");
           }
         }
 
@@ -95,28 +90,13 @@ function PlayState() {
 
     preventKeys("down", "right", "left", "right", "space", "r");
 
-    /* Network */
-    socket = io.connect("http://localhost");
-    socket.data = {};
     socket.data.game = this;
-
-    socket.on("connect", function() {
-      socket.emit("hello", {source: "development" });
-      var room = "test_room";
-      socket.emit("tryjoin", {room: room});
-      socket.data.room = room;
-    });
-
-    socket.on("sup", function(msg) {
-      console.log("received id from server: " + msg.id);
-      socket.data.id = msg.id;
-    });
 
     socket.on("fixer", function(msg) {
       /* start sending physics fixes */
       console.log("this client has been selected as fixer");
       socket.data.game.isFixer = true;
-      setInterval(this.data.game.sendPhysicsFix, 100);
+      this.interval = setInterval(this.data.game.sendPhysicsFix, 100);
     });
 
     socket.on("blockcreated", function(msg) {
@@ -130,6 +110,17 @@ function PlayState() {
       socket.data.game.addBlock(newBlock);
       newBlock.id = msg.id;
       socket.data.game.blockMap[msg.id] = newBlock;
+    });
+
+    socket.on("finished", function(msg) {
+      socket.data.game.bgloop.loop = false;
+      socket.data.game.bgloop.pause();
+      clearInterval(socket.data.game.interval);
+      socket.removeAllListeners("fixer");
+      socket.removeAllListeners("blockcreated");
+      socket.removeAllListeners("finished");
+      socket.removeAllListeners("fix");
+      switchState(new MenuState());
     });
 
     socket.on("fix", function(msg) {
@@ -316,6 +307,3 @@ function PlayState() {
   }
 }
 
-// var playState = new PlayState();
-// desiredFPS = 60;
-// switchState(playState);
