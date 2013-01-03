@@ -14,7 +14,7 @@
    height="480"
    id="svg3308"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="canvas.svg">
   <defs
      id="defs3310">
@@ -254,16 +254,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35355339"
-     inkscape:cx="497.58981"
-     inkscape:cy="395.88783"
+     inkscape:zoom="1"
+     inkscape:cx="1333.1772"
+     inkscape:cy="534.2476"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1366"
-     inkscape:window-height="746"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:window-height="741"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
      borderlayer="true"
      inkscape:snap-bbox="false"
@@ -289,7 +289,7 @@
     <g
        inkscape:export-ydpi="90"
        inkscape:export-xdpi="90"
-       inkscape:export-filename="C:\Users\Javier\Desktop\jenga-engineer\assets\img\menu.png"
+       inkscape:export-filename="/home/david/src/jenga-engineer/assets/img/menu.png"
        id="g4690"
        transform="matrix(1.0261993,0,0,1,1040.1545,116)"
        clip-path="url(#clipPath4720)">
@@ -1081,11 +1081,11 @@
        sodipodi:cy="676.25"
        sodipodi:rx="3.75"
        sodipodi:ry="3.75"
-       d="m -28.5,676.25 a 3.75,3.75 0 1 1 -7.5,0 3.75,3.75 0 1 1 7.5,0 z"
+       d="m -28.5,676.25 c 0,2.07107 -1.678932,3.75 -3.75,3.75 -2.071068,0 -3.75,-1.67893 -3.75,-3.75 0,-2.07107 1.678932,-3.75 3.75,-3.75 2.071068,0 3.75,1.67893 3.75,3.75 z"
        transform="translate(-12.727925,558.5736)" />
     <path
        transform="translate(-4.124372,558.5736)"
-       d="m -28.5,676.25 a 3.75,3.75 0 1 1 -7.5,0 3.75,3.75 0 1 1 7.5,0 z"
+       d="m -28.5,676.25 c 0,2.07107 -1.678932,3.75 -3.75,3.75 -2.071068,0 -3.75,-1.67893 -3.75,-3.75 0,-2.07107 1.678932,-3.75 3.75,-3.75 2.071068,0 3.75,1.67893 3.75,3.75 z"
        sodipodi:ry="3.75"
        sodipodi:rx="3.75"
        sodipodi:cy="676.25"
@@ -1095,7 +1095,7 @@
        sodipodi:type="arc" />
     <path
        transform="translate(4.21357,558.5736)"
-       d="m -28.5,676.25 a 3.75,3.75 0 1 1 -7.5,0 3.75,3.75 0 1 1 7.5,0 z"
+       d="m -28.5,676.25 c 0,2.07107 -1.678932,3.75 -3.75,3.75 -2.071068,0 -3.75,-1.67893 -3.75,-3.75 0,-2.07107 1.678932,-3.75 3.75,-3.75 2.071068,0 3.75,1.67893 3.75,3.75 z"
        sodipodi:ry="3.75"
        sodipodi:rx="3.75"
        sodipodi:cy="676.25"
@@ -1255,87 +1255,87 @@
        height="480" />
     <path
        style="fill:#ff6600;fill-opacity:1;fill-rule:nonzero;stroke:#723c1b;stroke-width:2.45274448;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       d="m 1145.6366,351.00257 c -0.6193,4.9553 1.2593,92.90865 1.2593,92.90865 l 31.59,-1.86146 -1.2593,-30.33081 40.2404,-5.58438 6.1865,-50.7521 -38.5298,-13.18278 z m 52.0114,16.57577 0.6569,26.18301 -29.1263,-1.25922 1.8615,-24.32155 14.0464,-5.97478 z"
+       d="m 1184.6366,351.00257 c -0.6193,4.9553 1.2593,92.90865 1.2593,92.90865 l 31.59,-1.86146 -1.2593,-30.33081 40.2404,-5.58438 6.1865,-50.7521 -38.5298,-13.18278 z m 52.0114,16.57577 0.6569,26.18301 -29.1263,-1.25922 1.8615,-24.32155 14.0464,-5.97478 z"
        id="path4652"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccccccccc"
-       inkscape:export-filename="C:\Users\Javier\Desktop\jenga-engineer\assets\img\menu.png"
+       inkscape:export-filename="/home/david/src/jenga-engineer/assets/img/menu.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
        style="fill:#ff6600;fill-opacity:1;fill-rule:nonzero;stroke:#723c1b;stroke-width:2.45274448;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       d="m 1245.3733,350.51752 -20.5769,91.7837 30.3888,5.0088 5.155,-22.97453 12.4371,0.005 10.5443,18.24642 23.7974,1.32965 -28.4647,-96.77265 -33.281,3.37369 z m 16.1248,23.89904 11.6814,5.03417 5.9814,28.06394 -22.1331,-3.36935 4.4703,-29.72876 z"
+       d="m 1284.3733,350.51752 -20.5769,91.7837 30.3888,5.0088 5.155,-22.97453 12.4371,0.005 10.5443,18.24642 23.7974,1.32965 -28.4647,-96.77265 -33.281,3.37369 z m 16.1248,23.89904 11.6814,5.03417 5.9814,28.06394 -22.1331,-3.36935 4.4703,-29.72876 z"
        id="path4654"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="C:\Users\Javier\Desktop\jenga-engineer\assets\img\menu.png"
+       inkscape:export-filename="/home/david/src/jenga-engineer/assets/img/menu.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
        style="fill:#ff6600;fill-opacity:1;fill-rule:nonzero;stroke:#723c1b;stroke-width:2.45274448;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       d="m 1311.5514,351.10237 -6.5916,84.61275 27.7434,3.21778 7.9227,-32.25809 3.652,0.9415 10.9322,36.47072 30.8569,2.84507 -15.8382,-37.52783 19.4671,-28.66456 -17.3111,-21.55422 -31.9877,-10.61427 z m 47.8003,21.23148 -2.3036,18.42615 -28.8008,1.68799 1.2754,-20.39031 13.6326,-4.82026 z"
+       d="m 1350.5514,351.10237 -6.5916,84.61275 27.7434,3.21778 7.9227,-32.25809 3.652,0.9415 10.9322,36.47072 30.8569,2.84507 -15.8382,-37.52783 19.4671,-28.66456 -17.3111,-21.55422 -31.9877,-10.61427 z m 47.8003,21.23148 -2.3036,18.42615 -28.8008,1.68799 1.2754,-20.39031 13.6326,-4.82026 z"
        id="path4656"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccccccccccccc"
-       inkscape:export-filename="C:\Users\Javier\Desktop\jenga-engineer\assets\img\menu.png"
+       inkscape:export-filename="/home/david/src/jenga-engineer/assets/img/menu.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
        style="fill:#ff6600;fill-opacity:1;fill-rule:nonzero;stroke:#723c1b;stroke-width:2.45274448;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       d="m 1387.5021,379.62121 -2.5283,-22.15501 62.2974,-5.86258 5.4116,25.56655 -18.1281,-0.42491 6.6696,66.13789 -25.532,-0.69985 -9.7276,-64.66906 z"
+       d="m 1426.5021,379.62121 -2.5283,-22.15501 62.2974,-5.86258 5.4116,25.56655 -18.1281,-0.42491 6.6696,66.13789 -25.532,-0.69985 -9.7276,-64.66906 z"
        id="path4658"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccc"
-       inkscape:export-filename="C:\Users\Javier\Desktop\jenga-engineer\assets\img\menu.png"
+       inkscape:export-filename="/home/david/src/jenga-engineer/assets/img/menu.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
        style="fill:#ff6600;fill-opacity:1;fill-rule:nonzero;stroke:#723c1b;stroke-width:2.45274448;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       d="m 1456.5766,355.97705 c 0,0 21.06,44.59763 20.4407,47.69469 -0.6195,3.09704 3.7164,39.02292 3.7164,39.02292 l 24.1571,-4.33588 -3.0971,-37.1647 30.3511,-44.59762 -31.5899,-3.71647 -6.8136,30.97058 -11.7688,-30.97058 z"
+       d="m 1495.5766,355.97705 c 0,0 21.06,44.59763 20.4407,47.69469 -0.6195,3.09704 3.7164,39.02292 3.7164,39.02292 l 24.1571,-4.33588 -3.0971,-37.1647 30.3511,-44.59762 -31.5899,-3.71647 -6.8136,30.97058 -11.7688,-30.97058 z"
        id="path4660"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="C:\Users\Javier\Desktop\jenga-engineer\assets\img\menu.png"
+       inkscape:export-filename="/home/david/src/jenga-engineer/assets/img/menu.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
        style="fill:#ff6600;fill-opacity:1;fill-rule:nonzero;stroke:#723c1b;stroke-width:2.45274448;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       d="m 1221.8469,494.11583 -29.6554,-6.55461 -27.9949,9.62054 -3.066,89.24047 36.1242,4.38423 27.0557,-10.62553 11.1141,-29.07164 -15.4392,-14.28943 14.8369,-21.68051 z m -18.8132,17.32297 2.8608,17.46022 c 0,0 -22.4674,2.99345 -24.945,2.99345 -2.4776,0 -0.7283,-18.6034 -0.7283,-18.6034 l 10.1835,-5.48275 z m 11.8035,42.39404 -4.7614,16.43849 -26.6625,3.7229 -3.1208,-19.81901 16.8362,-6.38254 z"
+       d="m 1260.8469,494.11583 -29.6554,-6.55461 -27.9949,9.62054 -3.066,89.24047 36.1242,4.38423 27.0557,-10.62553 11.1141,-29.07164 -15.4392,-14.28943 14.8369,-21.68051 z m -18.8132,17.32297 2.8608,17.46022 c 0,0 -22.4674,2.99345 -24.945,2.99345 -2.4776,0 -0.7283,-18.6034 -0.7283,-18.6034 l 10.1835,-5.48275 z m 11.8035,42.39404 -4.7614,16.43849 -26.6625,3.7229 -3.1208,-19.81901 16.8362,-6.38254 z"
        id="path4662"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccccccsccccccccc"
-       inkscape:export-filename="C:\Users\Javier\Desktop\jenga-engineer\assets\img\menu.png"
+       inkscape:export-filename="/home/david/src/jenga-engineer/assets/img/menu.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
        style="fill:#ff6600;fill-opacity:1;fill-rule:nonzero;stroke:#723c1b;stroke-width:2.45274448;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       d="m 1241.6409,497.20287 0.6193,72.47116 32.2095,15.4853 38.4035,-16.1047 -2.4777,-76.80706 -23.3622,-0.0877 1.2388,66.89643 -8.7145,6.35403 -12.4275,-4.76164 1.2388,-67.51586 z"
+       d="m 1280.6409,497.20287 0.6193,72.47116 32.2095,15.4853 38.4035,-16.1047 -2.4777,-76.80706 -23.3622,-0.0877 1.2388,66.89643 -8.7145,6.35403 -12.4275,-4.76164 1.2388,-67.51586 z"
        id="path4664"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccccc"
-       inkscape:export-filename="C:\Users\Javier\Desktop\jenga-engineer\assets\img\menu.png"
+       inkscape:export-filename="/home/david/src/jenga-engineer/assets/img/menu.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
        style="fill:#ff6600;fill-opacity:1;fill-rule:nonzero;stroke:#723c1b;stroke-width:2.45274448;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       d="m 1325.8809,497.82228 1.8582,87.33705 27.2542,-4.3359 -1.2389,-85.47879 z"
+       d="m 1364.8809,497.82228 1.8582,87.33705 27.2542,-4.3359 -1.2389,-85.47879 z"
        id="path4666"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="C:\Users\Javier\Desktop\jenga-engineer\assets\img\menu.png"
+       inkscape:export-filename="/home/david/src/jenga-engineer/assets/img/menu.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
        style="fill:#ff6600;fill-opacity:1;fill-rule:nonzero;stroke:#723c1b;stroke-width:2.45274448;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       d="m 1368.0009,494.72523 -2.4777,90.4341 60.7023,-4.9553 1.8583,-24.77648 -37.7842,2.47764 5.5748,-65.65762 z"
+       d="m 1407.0009,494.72523 -2.4777,90.4341 60.7023,-4.9553 1.8583,-24.77648 -37.7842,2.47764 5.5748,-65.65762 z"
        id="path4668"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="C:\Users\Javier\Desktop\jenga-engineer\assets\img\menu.png"
+       inkscape:export-filename="/home/david/src/jenga-engineer/assets/img/menu.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
        style="fill:#ff6600;fill-opacity:1;fill-rule:nonzero;stroke:#723c1b;stroke-width:2.45274448;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       d="m 1478.2354,492.85661 -42.704,10.56651 c 0,3.71647 1.2043,81.73991 1.2043,81.73991 0,0 35.9422,-3.1035 40.8974,-3.7229 4.9554,-0.6194 30.9878,-22.28277 30.9878,-22.28277 l 0.6022,-35.31295 -30.9877,-30.9878 z m -4.9275,24.80119 14.2346,24.1442 c 0,0 -25.4097,17.94363 -29.1263,20.42129 -3.7164,2.47764 0,-40.84258 0,-40.84258 l 14.8917,-3.72291 z"
+       d="m 1517.2354,492.85661 -42.704,10.56651 c 0,3.71647 1.2043,81.73991 1.2043,81.73991 0,0 35.9422,-3.1035 40.8974,-3.7229 4.9554,-0.6194 30.9878,-22.28277 30.9878,-22.28277 l 0.6022,-35.31295 -30.9877,-30.9878 z m -4.9275,24.80119 14.2346,24.1442 c 0,0 -25.4097,17.94363 -29.1263,20.42129 -3.7164,2.47764 0,-40.84258 0,-40.84258 l 14.8917,-3.72291 z"
        id="path4670"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="C:\Users\Javier\Desktop\jenga-engineer\assets\img\menu.png"
+       inkscape:export-filename="/home/david/src/jenga-engineer/assets/img/menu.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
   </g>
