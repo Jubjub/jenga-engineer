@@ -37,7 +37,7 @@ function PlayState() {
           if (soundBlock.playedSfx) {
             soundBlock = arb.b.block;
           }
-          
+
           if (!soundBlock.playedSfx) {
             if (soundBlock.type == 0) {
               playSound("assets/sound/metal_on_metal");
@@ -46,11 +46,11 @@ function PlayState() {
             } else if (soundBlock.type == 2) {
               playSound("assets/sound/wood_on_wood");
             }
-            
+
             soundBlock.playedSfx = true;
           }
         }
-        
+
         if (arb.a == space.game.ground|| arb.b == space.game.ground) {
           if (arb.b.name == "block" || arb.a.name == "block") {
             socket.emit("gameended");
@@ -306,4 +306,3 @@ function PlayState() {
     this.background.draw();
   }
 }
-
