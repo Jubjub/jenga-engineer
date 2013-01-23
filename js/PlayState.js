@@ -1,5 +1,5 @@
-
 /* Main game state */
+
 function PlayState() {
   this.setup = function() {
     this.blocks = [];
@@ -234,7 +234,7 @@ function PlayState() {
           var playState = this;
           setTimeout(function() {
             playState.canPlaceBlock = true;
-          }, 5000);
+          }, 2000);
           
           newBlock.id = uniqueID();
           this.addBlock(newBlock);
