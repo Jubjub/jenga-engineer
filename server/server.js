@@ -20,6 +20,7 @@ io.sockets.on("connection", function(socket) {
     socket.join(msg.room);
     socket.data.room = msg.room;
     console.log("granted");
+
     if (io.sockets.clients(msg.room).length == 1) {
       console.log("assigning fixer role to " + socket.data.ip);
       socket.emit("fixer");
@@ -45,10 +46,12 @@ io.sockets.on("connection", function(socket) {
     console.log("added " + socket.data.ip + " to random match pool");
     if (randomMatches.length == 2) {
       var room = uniqueID();
+
       for (var i = 0; i < randomMatches.length; i++) {
         randomMatches[i].join(room);
         randomMatches[i].data.room = room;
       }
+
       randomMatches[0].emit("fixer");
       randomMatches = [];
       console.log("put random matches on single room");
@@ -60,6 +63,7 @@ io.sockets.on("connection", function(socket) {
     console.log("game finished on room " + room);
     io.sockets.in(room).emit("finished", msg);
     var clients = io.sockets.clients(room);
+
     for (var i = 0; i < clients.length; i++) {
       clients[i].leave(room);
     }
@@ -73,4 +77,3 @@ function getRandomInt(min, max) {
 function uniqueID() {
   return ((new Date()).getTime()).toString(16) + getRandomInt(0, 8000000).toString(16);
 }
-

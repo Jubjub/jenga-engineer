@@ -79,6 +79,7 @@ function PlayState() {
     this.hintBlock.alpha = 0.5;
 
     this.canInsertBlock = true;
+    this.canPlaceBlock = true;
     this.nextBlock = {width: getRandomInt(30, 30 * 4), height: getRandomInt(30, 31)};
     this.nextBlock.width = Math.round(this.nextBlock.width / 30) * 30;
     this.nextBlock.height = Math.round(this.nextBlock.height / 30) * 30;
@@ -168,21 +169,7 @@ function PlayState() {
   }
 
   this.update = function() {
-
-    /* move camera with tower */
-    /*
-    if (this.towerHeight > 300) {
-      /* TODO: do this with some tweening library or add it to pentagine so it
-       * doesn't look so boring/sudden */
-    /*
-      var target = -(this.towerHeight - 300);
-      if (this.camera.y > target) {
-        this.camera.y -= 10 * this.dt;
-      }
-    }
-    */
-
-    /* move camera with mouse */
+    /* Move camera with mouse */
     if (mouseY - this.camera.y < 30) {
       this.camera.y -= 30 * this.dt;
     }
@@ -207,14 +194,14 @@ function PlayState() {
 
     /* Handle hint block */
     if (this.hintBlock.nextBlock != this.nextBlock) {
-      this.hintBlock.makeGraphic(this.nextBlock.width, this.nextBlock.height, 'black');
+      this.hintBlock.makeGraphic(this.nextBlock.width, this.nextBlock.height, "black");
       this.hintBlock.nextBlock = this.nextBlock;
     }
     this.hintBlock.x = mouseX - this.nextBlock.width / 2;
     this.hintBlock.y = mouseY - this.nextBlock.height / 2;
 
     /* Add new blocks */
-    if (isMouseDown("left")) {
+    if (isMouseDown("left") && this.canPlaceBlock) {
       if (this.canInsertBlock ) {
         if (this.hintBlock.lastShape) {
           this.space.staticBody.removeShape(this.hintBlock.lastShape);
@@ -241,7 +228,14 @@ function PlayState() {
         if (!colliding) {
           var newBlock = new Block(blockPos.x, blockPos.y,
                                   this.nextBlock.width, this.nextBlock.height,
-                                  this.color)
+                                  this.color);
+
+          this.canPlaceBlock = false;
+          var playState = this;
+          setTimeout(function() {
+            playState.canPlaceBlock = true;
+          }, 5000);
+          
           newBlock.id = uniqueID();
           this.addBlock(newBlock);
           this.blockMap[newBlock.id] = newBlock;
@@ -253,11 +247,13 @@ function PlayState() {
                                    color: this.color});
 
           this.nextBlock = {width: getRandomInt(30, 30 * 4), height: getRandomInt(30, 31)};
+
           if (!getRandomInt(0, 3)) {
             var tmp = this.nextBlock.width;
             this.nextBlock.width = this.nextBlock.height;
             this.nextBlock.height = tmp;
           }
+
           this.nextBlock.width = Math.round(this.nextBlock.width / 30) * 30;
           this.nextBlock.height = Math.round(this.nextBlock.height / 30) * 30;
           this.canInsertBlock = false;
